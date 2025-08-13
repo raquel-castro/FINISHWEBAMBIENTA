@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ambienta | Muebles de Melamina - Deco & Design</title>
+    <link rel="stylesheet" href="estilos.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="encabezado">
+        <div class="encabezado__contenedor">
+            <a href="index.html" class="encabezado__enlaceLogo">
+                <img src="GALERIA/LOGO AMBIENTA.png" alt="Ambienta Logo" class="encabezado__logo">
+            </a>
+            <!-- Checkbox oculto -->
+            <input type="checkbox" id="menu-toggle" class="encabezado__checkbox">
+
+            <!-- Label como botón hamburguesa -->
+            <label for="menu-toggle" class="encabezado__alternarMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+
+
+            <nav class="encabezado__nav">
+                <ul class="encabezado__listaNav">
+                    <li class="encabezado__itemNav"><a href="#quienes-somos" class="encabezado__enlaceNav">Quiénes Somos</a></li>
+                    <li class="encabezado__itemNav"><a href="#catalogo" class="encabezado__enlaceNav">Catálogo</a></li>
+                    <li class="encabezado__itemNav"><a href="#cotizacion" class="encabezado__enlaceNav">Cotización</a></li>
+                    <li class="encabezado__itemNav"><a href="#contacto" class="encabezado__enlaceNav">Contacto</a></li>
+                </ul>
+            </nav>
+            <div class="encabezado__iconos">
+                <a href="#carrito" class="encabezado__enlaceIcono encabezado__enlaceIcono--carrito">
+                    🛒
+                    <span class="encabezado__contadorCarrito">0</span>
+                </a>
+                <a href="#cuenta" class="encabezado__enlaceIcono encabezado__enlaceIcono--usuario">
+                    👤
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+    <section id="inicio" class="hero">
+    <!-- Carrusel de imágenes -->
+        <div class="hero__carousel">
+            <div class="hero__slides">
+                <img src="GALERIA/CARRUSEL1.jpg" alt="Mueble 1">
+                <img src="GALERIA/CARRUSEL2.jpg" alt="Mueble 2">
+                <img src="GALERIA/CARRUSEL3.jpeg" alt="Mueble 3">
+                <img src="GALERIA/CARRUSEL4.jpg" alt="Mueble 4">
+                <img src="GALERIA/CARRUSEL5.jpg" alt="Mueble 5">   
+            </div>
+        </div>
+
+    <!-- Contenido encima del carrusel -->
+        <div class="hero__container">
+            <h1 class="hero__title">Muebles de Melamina con Estilo y Durabilidad</h1>
+            <h2 class="hero__subtitle animar">Diseñamos espacios funcionales para tu hogar y oficina.</h2>
+            <div class="hero__buttons">
+                <a href="#proyectos" class="button button--primary">Explorar Catálogo</a>
+            </div>
+        </div>
+    </section>
+
+
+        <section id="quienes-somos" class="nosotros">
+            <div class="nosotros__contenedor">
+                <h2 class="nosotros__titulo animar">Quiénes Somos</h2>
+                <div class="nosotros__tarjetasInfo">
+                    <div class="nosotros__tarjeta">
+                        <h3 class="nosotros__tarjetaTitulo">Nuestra Misión</h3>
+                        <p class="nosotros__tarjetaTexto">Ofrecer soluciones de mobiliario innovadoras y duraderas, adaptadas a las necesidades y estilos de vida de nuestros clientes, garantizando calidad y satisfacción en cada proyecto.</p>
+                    </div>
+                    <div class="nosotros__tarjeta">
+                        <h3 class="nosotros__tarjetaTitulo">Nuestra Visión</h3>
+                        <p class="nosotros__tarjetaTexto">Ser líderes en el mercado de muebles de melamina, reconocidos por nuestra excelencia en diseño, fabricación y servicio al cliente, expandiendo nuestra presencia a nivel nacional e internacional.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="categorias" class="categorias">
+            <div class="categorias__contenedor">
+                <h2 class="categorias__titulo animar">Nuestras Categorías</h2>
+                <div class="categorias__rejilla">
+                    <a href="#cocina" class="categorias__item itemCategoria">
+                        <img src="GALERIA/cocina.jpg" alt="Muebles de Cocina" class="itemCategoria__imagen">
+                        <h3 class="itemCategoria__titulo">Muebles de Cocina</h3>
+                    </a>
+                    <a href="#dormitorio" class="categorias__item itemCategoria">
+                        <img src="GALERIA/dormitorio.jpg" alt="Muebles de Dormitorio" class="itemCategoria__imagen">
+                        <h3 class="itemCategoria__titulo">Muebles de Dormitorio</h3>
+                    </a>
+                    <a href="#escritorios" class="categorias__item itemCategoria">
+                        <img src="GALERIA/oficina.jpg" alt="Escritorios" class="itemCategoria__imagen">
+                        <h3 class="itemCategoria__titulo">Escritorios y Oficina</h3>
+                    </a>
+                    </div>
+            </div>
+        </section>
+
+        <section id="catalogo" class="productos">
+            <div class="productos__contenedor">
+                <h2 class="productos__titulo animar">Nuestro Catálogo</h2>
+                <div class="productos__rejilla">
+                    <article class="tarjetaProducto">
+                        <img src="GALERIA/roperom.webp" alt="Clóset Moderno" class="tarjetaProducto__imagen">
+                        <h3 class="tarjetaProducto__nombre">Clóset Moderno "Minimal"</h3>
+                        <p class="tarjetaProducto__precio">S/2450.00</p>
+                        <button class="tarjetaProducto__boton boton boton--secundario">Añadir al Carrito</button>
+                    </article>
+                    <article class="tarjetaProducto">
+                        <img src="GALERIA/escritorio.jpg" alt="Escritorio de Oficina" class="tarjetaProducto__imagen">
+                        <h3 class="tarjetaProducto__nombre">Escritorio "Home Office"</h3>
+                        <p class="tarjetaProducto__precio">S/.890.00</p>
+                        <button class="tarjetaProducto__boton boton boton--secundario">Añadir al Carrito</button>
+                    </article>
+                    </div>
+                <a href="#" class="productos__verTodo boton boton--esquema">Ver Todo el Catálogo</a>
+            </div>
+        </section>
+
+        <section id="cotizacion" class="formularioCotizacion">
+            <div class="formularioCotizacion__contenedor">
+                <h2 class="formularioCotizacion__titulo animar">Solicita tu Cotización</h2>
+                <p class="formularioCotizacion__descripcion">Cuéntanos qué mueble necesitas y te enviaremos una propuesta personalizada.</p>
+                <form class="formularioCotizacion__formulario">
+                    <div class="formularioCotizacion__grupo">
+                        <label for="nombre" class="formularioCotizacion__etiqueta">Nombre completo:</label>
+                        <input type="text" id="nombre" name="nombre" class="formularioCotizacion__entrada" required>
+                    </div>
+                    <div class="formularioCotizacion__grupo">
+                        <label for="email" class="formularioCotizacion__etiqueta">Correo electrónico:</label>
+                        <input type="email" id="email" name="email" class="formularioCotizacion__entrada" required>
+                    </div>
+                    <div class="formularioCotizacion__grupo">
+                        <label for="telefono" class="formularioCotizacion__etiqueta">Teléfono:</label>
+                        <input type="tel" id="telefono" name="telefono" class="formularioCotizacion__entrada">
+                    </div>
+                    <div class="formularioCotizacion__grupo">
+                        <label for="mensaje" class="formularioCotizacion__etiqueta">Detalles del mueble (medidas, tipo, color, etc.):</label>
+                        <textarea id="mensaje" name="mensaje" class="formularioCotizacion__areaTexto" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="formularioCotizacion__enviar boton boton--primario">Enviar Cotización</button>
+                </form>
+            </div>
+        </section>
+
+        <section class="testimonios">
+            <div class="testimonios__contenedor">
+                <h2 class="testimonios__titulo animar">Clientes Satisfechos</h2>
+                <div class="testimonios__rejilla">
+                    <blockquote class="tarjetaTestimonio">
+                        <p class="tarjetaTestimonio__texto">"¡Absolutamente encantada con mi nuevo escritorio! Calidad y diseño impecables. La atención al cliente fue excelente."</p>
+                        <cite class="tarjetaTestimonio__autor">- María G.</cite>
+                    </blockquote>
+                    <blockquote class="tarjetaTestimonio">
+                        <p class="tarjetaTestimonio__texto">"Ambienta transformó mi sala con un mueble a medida. Profesionales y súper eficientes. Los recomiendo 100%."</p>
+                        <cite class="tarjetaTestimonio__autor">- Juan P.</cite>
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="pieDePagina">
+        <div class="pieDePagina__contenedor">
+            <div class="pieDePagina__seccion pieDePagina__seccion--contacto">
+                <h3 class="pieDePagina__titulo">Contacto</h3>
+                <p class="pieDePagina__texto">Dirección: Av. Sosa Pelaez 1580 - LIMA</p>
+                <p class="pieDePagina__texto">Email: <a href="mailto:ambienta@mueblesambienta.pe" class="pieDePagina__enlace">ambienta@mueblesambienta.pe</a></p>
+                <p class="pieDePagina__texto">Teléfono: <a href="tel:+51994333225" class="pieDePagina__enlace">994 333 225</a></p>
+            </div>
+            <div class="pieDePagina__seccion pieDePagina__seccion--social">
+                <h3 class="pieDePagina__titulo">Síguenos</h3>
+                <div class="pieDePagina__iconosSociales">
+                    <a href="#" class="pieDePagina__enlaceSocial">Facebook</a>
+                    <a href="#" class="pieDePagina__enlaceSocial">Instagram</a>
+                    <a href="#" class="pieDePagina__enlaceSocial">TikTok</a>
+                </div>
+            </div>
+            <div class="pieDePagina__seccion pieDePagina__seccion--legal">
+                <p class="pieDePagina__texto pieDePagina__texto--copyright">COPYRIGHT © 2021 Ambienta. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    </body>
+</html>
