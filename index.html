@@ -8,6 +8,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="barraSuperior">
+        <div class="barraSuperior__contenedor">
+            <span class="barraSuperior__texto">Fabricación a medida con melamina Pelíkano 18mm | Envíos e instalación en Lima</span>
+            <div class="barraSuperior__accesos">
+                <a href="tel:+51994333225" class="barraSuperior__enlace">Atención: 994 333 225</a>
+                <a href="#libro-reclamaciones" class="barraSuperior__enlace">Libro de Reclamaciones</a>
+            </div>
+        </div>
+    </div>
+
     <header class="encabezado">
         <div class="encabezado__contenedor">
             <a href="index.html" class="encabezado__enlaceLogo">
@@ -23,23 +33,32 @@
                 <span></span>
             </label>
 
-
             <nav class="encabezado__nav">
                 <ul class="encabezado__listaNav">
+                    <li class="encabezado__itemNav"><a href="#inicio" class="encabezado__enlaceNav">Inicio</a></li>
                     <li class="encabezado__itemNav"><a href="#quienes-somos" class="encabezado__enlaceNav">Quiénes Somos</a></li>
+                    <li class="encabezado__itemNav"><a href="#categorias" class="encabezado__enlaceNav">Categorías</a></li>
                     <li class="encabezado__itemNav"><a href="#catalogo" class="encabezado__enlaceNav">Catálogo</a></li>
                     <li class="encabezado__itemNav"><a href="#cotizacion" class="encabezado__enlaceNav">Cotización</a></li>
                     <li class="encabezado__itemNav"><a href="#contacto" class="encabezado__enlaceNav">Contacto</a></li>
                 </ul>
             </nav>
             <div class="encabezado__iconos">
-                <a href="#carrito" class="encabezado__enlaceIcono encabezado__enlaceIcono--carrito">
-                    🛒
-                    <span class="encabezado__contadorCarrito">0</span>
-                </a>
-                <a href="#cuenta" class="encabezado__enlaceIcono encabezado__enlaceIcono--usuario">
-                    👤
-                </a>
+                <button type="button" id="btnAbrirCarrito" class="encabezado__botonIcono encabezado__botonIcono--carrito" aria-label="Ver Carrito de Compras">
+                    <svg class="iconoSvg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="encabezado__contadorCarrito" id="contadorCarrito">0</span>
+                </button>
+                <button type="button" id="btnAbrirAuth" class="encabezado__botonIcono encabezado__botonIcono--usuario" aria-label="Ingresar o Registrarse">
+                    <svg class="iconoSvg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span class="encabezado__etiquetaUsuario" id="etiquetaUsuario">Mi Cuenta</span>
+                </button>
             </div>
         </div>
     </header>
