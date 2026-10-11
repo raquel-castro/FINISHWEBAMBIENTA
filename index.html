@@ -440,23 +440,49 @@
 
     <footer class="pieDePagina">
         <div class="pieDePagina__contenedor">
+            <div class="pieDePagina__seccion pieDePagina__seccion--empresa">
+                <h3 class="pieDePagina__titulo">Ambienta Deco & Design</h3>
+                <p class="pieDePagina__texto">Especialistas en diseño y fabricación de muebles modernos en melamina de 18mm para hogares, oficinas y proyectos corporativos.</p>
+                <p class="pieDePagina__texto pieDePagina__texto--ruc">RUC: 20608541239 | AMBIENTA S.A.C.</p>
+            </div>
             <div class="pieDePagina__seccion pieDePagina__seccion--contacto">
-                <h3 class="pieDePagina__titulo">Contacto</h3>
-                <p class="pieDePagina__texto">Dirección: Av. Sosa Pelaez 1580 - LIMA</p>
+                <h3 class="pieDePagina__titulo">Atención y Showroom</h3>
+                <p class="pieDePagina__texto">Dirección: Av. Sosa Peláez 1580 - Cercado de Lima</p>
                 <p class="pieDePagina__texto">Email: <a href="mailto:ambienta@mueblesambienta.pe" class="pieDePagina__enlace">ambienta@mueblesambienta.pe</a></p>
-                <p class="pieDePagina__texto">Teléfono: <a href="tel:+51994333225" class="pieDePagina__enlace">994 333 225</a></p>
+                <p class="pieDePagina__texto">Central Telefónica: <a href="tel:+51994333225" class="pieDePagina__enlace">994 333 225</a></p>
+                <p class="pieDePagina__texto">Horario: Lun a Sáb de 9:00 am a 7:00 pm</p>
             </div>
             <div class="pieDePagina__seccion pieDePagina__seccion--social">
-                <h3 class="pieDePagina__titulo">Síguenos</h3>
+                <h3 class="pieDePagina__titulo">Canales Oficiales</h3>
                 <div class="pieDePagina__iconosSociales">
-                    <a href="#" class="pieDePagina__enlaceSocial">Facebook</a>
-                    <a href="#" class="pieDePagina__enlaceSocial">Instagram</a>
-                    <a href="#" class="pieDePagina__enlaceSocial">TikTok</a>
+                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="pieDePagina__enlaceSocial">Facebook</a>
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="pieDePagina__enlaceSocial">Instagram</a>
+                    <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="pieDePagina__enlaceSocial">TikTok</a>
+                </div>
+                <div style="margin-top: 16px;">
+                    <a href="#catalogo" class="pieDePagina__enlace" style="display: block; margin-bottom: 6px;">Catálogo Completo</a>
+                    <a href="#cotizacion" class="pieDePagina__enlace" style="display: block;">Cotizaciones a Medida</a>
                 </div>
             </div>
-            <div class="pieDePagina__seccion pieDePagina__seccion--legal">
-                <p class="pieDePagina__texto pieDePagina__texto--copyright">COPYRIGHT © 2021 Ambienta. Todos los derechos reservados.</p>
+            <div class="pieDePagina__seccion pieDePagina__seccion--reclamaciones">
+                <h3 class="pieDePagina__titulo">Libro de Reclamaciones</h3>
+                <a href="#libro-reclamaciones" id="enlaceFooterLibro" class="pieDePagina__libroBoton" aria-label="Abrir Libro de Reclamaciones Virtual">
+                    <div class="libroBadge">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="libroBadge__icono">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                        </svg>
+                        <div class="libroBadge__textos">
+                            <span class="libroBadge__principal">LIBRO DE RECLAMACIONES</span>
+                            <span class="libroBadge__secundario">VIRTUAL</span>
+                        </div>
+                    </div>
+                </a>
+                <p class="pieDePagina__textoLegal">Conforme a la Ley N° 29571 - Código de Protección y Defensa del Consumidor.</p>
             </div>
+        </div>
+        <div class="pieDePagina__barraInferior">
+            <p class="pieDePagina__texto pieDePagina__texto--copyright">COPYRIGHT © 2026 Ambienta Deco & Design S.A.C. Todos los derechos reservados. Desarrollado para presentación de proyecto académico.</p>
         </div>
     </footer>
 
@@ -737,6 +763,171 @@
                 </div>
                 <div class="authPerfil__acciones">
                     <button type="button" id="btnCerrarSesion" class="boton boton--esquema" style="width: 100%;">Cerrar Sesión</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Libro de Reclamaciones Virtual (Indecopi Ley N° 29571) -->
+    <div class="modalContenedor" id="modalLibroReclamaciones" aria-hidden="true">
+        <div class="modalContenedor__overlay" id="overlayModalLibro"></div>
+        <div class="modalContenedor__caja modalContenedor__caja--libro">
+            <button type="button" class="modalContenedor__cerrar" id="btnCerrarLibro" aria-label="Cerrar ventana">&times;</button>
+            
+            <div id="libroFormularioContenedor">
+                <div class="libroEncabezado">
+                    <div class="libroEncabezado__identificacion">
+                        <h3 class="libroEncabezado__titulo">LIBRO DE RECLAMACIONES VIRTUAL</h3>
+                        <p class="libroEncabezado__empresa"><strong>AMBIENTA DECO & DESIGN S.A.C.</strong> | RUC: 20608541239</p>
+                        <p class="libroEncabezado__direccion">Dirección: Av. Sosa Peláez 1580, Cercado de Lima, Lima - Perú</p>
+                    </div>
+                    <div class="libroEncabezado__hoja">
+                        <span class="libroEncabezado__hojaTexto">HOJA DE RECLAMACIÓN</span>
+                        <strong class="libroEncabezado__hojaNumero" id="libroNumeroHoja">LR-2026-0001</strong>
+                        <span class="libroEncabezado__fecha" id="libroFechaActual">11/10/2026</span>
+                    </div>
+                </div>
+
+                <form id="formLibroReclamaciones" class="libroFormulario">
+                    <!-- 1. IDENTIFICACIÓN DEL CONSUMIDOR -->
+                    <div class="libroSeccion">
+                        <h4 class="libroSeccion__titulo">1. Identificación del Consumidor Reclamante</h4>
+                        <div class="libroGrid">
+                            <div class="libroCampo libroCampo--full">
+                                <label for="reclamoNombre" class="libroLabel">Nombres y Apellidos *</label>
+                                <input type="text" id="reclamoNombre" required class="libroInput" placeholder="Nombre completo del cliente">
+                            </div>
+                            <div class="libroCampo">
+                                <label for="reclamoTipoDoc" class="libroLabel">Tipo de Documento *</label>
+                                <select id="reclamoTipoDoc" required class="libroSelect">
+                                    <option value="DNI">D.N.I.</option>
+                                    <option value="CE">Carné de Extranjería</option>
+                                    <option value="Pasaporte">Pasaporte</option>
+                                    <option value="RUC">R.U.C.</option>
+                                </select>
+                            </div>
+                            <div class="libroCampo">
+                                <label for="reclamoNumDoc" class="libroLabel">Número de Documento *</label>
+                                <input type="text" id="reclamoNumDoc" required maxlength="12" class="libroInput" placeholder="Nro de documento">
+                            </div>
+                            <div class="libroCampo libroCampo--full">
+                                <label for="reclamoDomicilio" class="libroLabel">Domicilio (Dirección, Distrito y Departamento) *</label>
+                                <input type="text" id="reclamoDomicilio" required class="libroInput" placeholder="Av. / Jr. / Calle, Nro, Distrito, Lima">
+                            </div>
+                            <div class="libroCampo">
+                                <label for="reclamoTelefono" class="libroLabel">Teléfono / Celular *</label>
+                                <input type="tel" id="reclamoTelefono" required class="libroInput" placeholder="999 000 000">
+                            </div>
+                            <div class="libroCampo">
+                                <label for="reclamoEmail" class="libroLabel">Correo Electrónico (para notificación formal) *</label>
+                                <input type="email" id="reclamoEmail" required class="libroInput" placeholder="ejemplo@correo.com">
+                            </div>
+                            <div class="libroCampo libroCampo--full">
+                                <label for="reclamoApoderado" class="libroLabel">Padre o Madre (en caso de ser menor de edad)</label>
+                                <input type="text" id="reclamoApoderado" class="libroInput" placeholder="Nombre del apoderado (opcional)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. IDENTIFICACIÓN DEL BIEN CONTRATADO -->
+                    <div class="libroSeccion">
+                        <h4 class="libroSeccion__titulo">2. Identificación del Bien Contratado</h4>
+                        <div class="libroGrid">
+                            <div class="libroCampo libroCampo--full">
+                                <label class="libroLabel">Tipo de Bien *</label>
+                                <div class="libroRadios">
+                                    <label class="libroRadioLabel">
+                                        <input type="radio" name="reclamoTipoBien" value="Producto" checked>
+                                        <span>Producto (Mueble de Melamina terminado)</span>
+                                    </label>
+                                    <label class="libroRadioLabel">
+                                        <input type="radio" name="reclamoTipoBien" value="Servicio">
+                                        <span>Servicio (Diseño a medida, Armado o Instalación)</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="libroCampo">
+                                <label for="reclamoMonto" class="libroLabel">Monto Reclamado (S/) *</label>
+                                <input type="number" id="reclamoMonto" step="0.01" min="0" required class="libroInput" placeholder="0.00">
+                            </div>
+                            <div class="libroCampo">
+                                <label for="reclamoComprobante" class="libroLabel">N° de Boleta, Factura o Pedido</label>
+                                <input type="text" id="reclamoComprobante" class="libroInput" placeholder="Ej. PED-2026-1234">
+                            </div>
+                            <div class="libroCampo libroCampo--full">
+                                <label for="reclamoDescripcionBien" class="libroLabel">Descripción del Mueble o Servicio Contratado *</label>
+                                <input type="text" id="reclamoDescripcionBien" required class="libroInput" placeholder="Ej. Clóset Moderno Minimal color roble 18mm">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. DETALLE DE LA RECLAMACIÓN Y PEDIDO -->
+                    <div class="libroSeccion">
+                        <h4 class="libroSeccion__titulo">3. Detalle de la Reclamación</h4>
+                        <div class="libroGrid">
+                            <div class="libroCampo libroCampo--full">
+                                <label class="libroLabel">Naturaleza de la Solicitud *</label>
+                                <div class="libroRadios">
+                                    <label class="libroRadioLabel">
+                                        <input type="radio" name="reclamoTipo" value="Reclamo" checked>
+                                        <div>
+                                            <strong>RECLAMO:</strong>
+                                            <p style="font-size: 0.8rem; color: #64748b; margin: 0;">Disconformidad relacionada a los muebles o servicios prestados.</p>
+                                        </div>
+                                    </label>
+                                    <label class="libroRadioLabel">
+                                        <input type="radio" name="reclamoTipo" value="Queja">
+                                        <div>
+                                            <strong>QUEJA:</strong>
+                                            <p style="font-size: 0.8rem; color: #64748b; margin: 0;">Disconformidad no relacionada a los muebles; malestar con la atención.</p>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="libroCampo libroCampo--full">
+                                <label for="reclamoDetalleHechos" class="libroLabel">Detalle de los Hechos (Fundamento del reclamo o queja) *</label>
+                                <textarea id="reclamoDetalleHechos" required class="libroTextarea" rows="4" placeholder="Describa claramente lo sucedido, medidas, fechas y motivos de su disconformidad..."></textarea>
+                            </div>
+                            <div class="libroCampo libroCampo--full">
+                                <label for="reclamoPedidoConcreto" class="libroLabel">Pedido Concreto del Consumidor (Solución solicitada) *</label>
+                                <textarea id="reclamoPedidoConcreto" required class="libroTextarea" rows="3" placeholder="Indique qué solución solicita (reparación de pieza, cambio de producto, nota de crédito, etc.)..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DECLARACIÓN Y ENVÍO -->
+                    <div class="libroDeclaracion">
+                        <label class="libroCheckLabel">
+                            <input type="checkbox" id="reclamoConformidad" required>
+                            <span>Declaro que soy el titular del reclamo o queja y que los datos consignados en el presente formulario son verídicos.</span>
+                        </label>
+                        <p class="libroNotaLegal">
+                            * La formulación del reclamo no impide acudir a otras vías de solución de controversias ni es requisito previo para interponer una denuncia ante INDECOPI.<br>
+                            * El proveedor deberá dar respuesta al reclamo o queja en un plazo no mayor a quince (15) días hábiles improrrogables conforme a la Ley N° 29571.
+                        </p>
+                        <button type="submit" class="boton boton--primario libroBtnSubmit">Enviar Hoja de Reclamación</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Pantalla de Confirmacion de Reclamacion -->
+            <div id="libroExitoContenedor" style="display: none;" class="libroExito">
+                <div class="libroExito__icono">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#3f51b5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                </div>
+                <h3 class="libroExito__titulo">Hoja de Reclamación Registrada</h3>
+                <p class="libroExito__codigo">Código de Registro: <strong id="libroCodigoConfirmado">LR-2026-0001</strong></p>
+                <div class="libroExito__tarjeta" id="libroResumenTicket"></div>
+                <p class="libroExito__aviso">Hemos enviado una copia formal de esta hoja a su correo electrónico. De acuerdo a la normativa de INDECOPI, daremos respuesta oficial en un plazo máximo de 15 días hábiles.</p>
+                <div class="libroExito__botones">
+                    <button type="button" class="boton boton--secundario" onclick="window.print()">Imprimir Constancia</button>
+                    <button type="button" id="btnCerrarExitoLibro" class="boton boton--primario">Entendido y Cerrar</button>
                 </div>
             </div>
         </div>

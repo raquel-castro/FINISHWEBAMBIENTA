@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     inicializarCatalogo();
     inicializarCarrito();
     inicializarAutenticacion();
+    inicializarLibroReclamaciones();
 });
 
 // --------------------------------------------------------
@@ -846,6 +847,142 @@ function inicializarAutenticacion() {
     // Estado inicial en cabecera
     actualizarCabeceraUsuario();
 }
+
+// --------------------------------------------------------
+// 5. LIBRO DE RECLAMACIONES VIRTUAL (INDECOPI)
+// --------------------------------------------------------
+const CLAVE_RECLAMOS_STORAGE = 'ambienta_hojas_reclamaciones';
+
+function inicializarLibroReclamaciones() {
+    const modalLibro = document.getElementById('modalLibroReclamaciones');
+    const btnCerrar = document.getElementById('btnCerrarLibro');
+    const overlay = document.getElementById('overlayModalLibro');
+    const formLibro = document.getElementById('formLibroReclamaciones');
+
+    const formContenedor = document.getElementById('libroFormularioContenedor');
+    const exitoContenedor = document.getElementById('libroExitoContenedor');
+    const btnCerrarExito = document.getElementById('btnCerrarExitoLibro');
+
+    const numHojaElem = document.getElementById('libroNumeroHoja');
+    const fechaElem = document.getElementById('libroFechaActual');
+
+    function formatearFechaHoy() {
+        const hoy = new Date();
+        const dia = String(hoy.getDate()).padStart(2, '0');
+        const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+        const anio = hoy.getFullYear();
+        return `${dia}/${mes}/${anio}`;
+    }
+
+    function generarNumeroHoja() {
+        try {
+            const guardados = JSON.parse(localStorage.getItem(CLAVE_RECLAMOS_STORAGE) || '[]');
+            const siguiente = guardados.length + 1;
+            const anio = new Date().getFullYear();
+            return `LR-${anio}-${String(siguiente).padStart(4, '0')}`;
+        } catch (e) {
+            return `LR-${new Date().getFullYear()}-0001`;
+        }
+    }
+
+    function abrirModalLibro() {
+        if (!modalLibro) return;
+
+        if (fechaElem) fechaElem.textContent = formatearFechaHoy();
+        if (numHojaElem) numHojaElem.textContent = generarNumeroHoja();
+
+        if (formContenedor) formContenedor.style.display = 'block';
+        if (exitoContenedor) exitoContenedor.style.display = 'none';
+
+        modalLibro.classList.add('modalContenedor--activo');
+        modalLibro.setAttribute('aria-hidden', 'false');
+    }
+
+    function cerrarModalLibro() {
+        if (!modalLibro) return;
+        modalLibro.classList.remove('modalContenedor--activo');
+        modalLibro.setAttribute('aria-hidden', 'true');
+    }
+
+    // Interceptar enlaces al libro de reclamaciones
+    document.addEventListener('click', (e) => {
+        const enlaceLibro = e.target.closest('a[href="#libro-reclamaciones"]');
+        if (enlaceLibro) {
+            e.preventDefault();
+            abrirModalLibro();
+        }
+    });
+
+    if (btnCerrar) btnCerrar.addEventListener('click', cerrarModalLibro);
+    if (overlay) overlay.addEventListener('click', cerrarModalLibro);
+    if (btnCerrarExito) btnCerrarExito.addEventListener('click', cerrarModalLibro);
+
+    if (formLibro) {
+        formLibro.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const numeroHoja = generarNumeroHoja();
+            const fecha = formatearFechaHoy();
+
+            const nombre = document.getElementById('reclamoNombre')?.value || '';
+            const tipoDoc = document.getElementById('reclamoTipoDoc')?.value || 'DNI';
+            const numDoc = document.getElementById('reclamoNumDoc')?.value || '';
+            const domicilio = document.getElementById('reclamoDomicilio')?.value || '';
+            const telefono = document.getElementById('reclamoTelefono')?.value || '';
+            const email = document.getElementById('reclamoEmail')?.value || '';
+            const apoderado = document.getElementById('reclamoApoderado')?.value || 'N/A';
+
+            const tipoBien = formLibro.querySelector('input[name="reclamoTipoBien"]:checked')?.value || 'Producto';
+            const monto = document.getElementById('reclamoMonto')?.value || '0.00';
+            const comprobante = document.getElementById('reclamoComprobante')?.value || 'N/A';
+            const descripcionBien = document.getElementById('reclamoDescripcionBien')?.value || '';
+
+            const tipoReclamo = formLibro.querySelector('input[name="reclamoTipo"]:checked')?.value || 'Reclamo';
+            const hechos = document.getElementById('reclamoDetalleHechos')?.value || '';
+            const pedido = document.getElementById('reclamoPedidoConcreto')?.value || '';
+
+            const nuevaReclamacion = {
+                numeroHoja,
+                fecha,
+                consumidor: { nombre, tipoDoc, numDoc, domicilio, telefono, email, apoderado },
+                bien: { tipoBien, monto, comprobante, descripcionBien },
+                reclamacion: { tipoReclamo, hechos, pedido }
+            };
+
+            // Guardar en storage
+            try {
+                const guardados = JSON.parse(localStorage.getItem(CLAVE_RECLAMOS_STORAGE) || '[]');
+                guardados.push(nuevaReclamacion);
+                localStorage.setItem(CLAVE_RECLAMOS_STORAGE, JSON.stringify(guardados));
+            } catch (err) {
+                console.error('Error al guardar reclamacion:', err);
+            }
+
+            // Mostrar pantalla de exito
+            if (formContenedor) formContenedor.style.display = 'none';
+            if (exitoContenedor) exitoContenedor.style.display = 'block';
+
+            const codigoElem = document.getElementById('libroCodigoConfirmado');
+            if (codigoElem) codigoElem.textContent = numeroHoja;
+
+            const resumenTicket = document.getElementById('libroResumenTicket');
+            if (resumenTicket) {
+                resumenTicket.innerHTML = `
+                    <p><strong>Fecha de Emisión:</strong> ${fecha}</p>
+                    <p><strong>Consumidor:</strong> ${nombre} (${tipoDoc}: ${numDoc})</p>
+                    <p><strong>Domicilio:</strong> ${domicilio}</p>
+                    <p><strong>Correo Notificación:</strong> ${email} | <strong>Teléfono:</strong> ${telefono}</p>
+                    <p><strong>Tipo de Bien:</strong> ${tipoBien} - S/ ${parseFloat(monto).toFixed(2)} (${descripcionBien})</p>
+                    <p><strong>Naturaleza:</strong> <span style="color: #3f51b5; font-weight: 700;">${tipoReclamo.toUpperCase()}</span></p>
+                    <p><strong>Solución Solicitada:</strong> ${pedido}</p>
+                `;
+            }
+
+            formLibro.reset();
+        });
+    }
+}
+
 
 
 
