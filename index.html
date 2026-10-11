@@ -146,22 +146,251 @@
 
         <section id="catalogo" class="productos">
             <div class="productos__contenedor">
-                <h2 class="productos__titulo animar">Nuestro Catálogo</h2>
-                <div class="productos__rejilla">
-                    <article class="tarjetaProducto">
-                        <img src="galeria/ropero_1.webp" alt="Clóset Moderno" class="tarjetaProducto__imagen">
-                        <h3 class="tarjetaProducto__nombre">Clóset Moderno "Minimal"</h3>
-                        <p class="tarjetaProducto__precio">S/2450.00</p>
-                        <button class="tarjetaProducto__boton boton boton--secundario">Añadir al Carrito</button>
-                    </article>
-                    <article class="tarjetaProducto">
-                        <img src="galeria/escritorio_1.jpg" alt="Escritorio de Oficina" class="tarjetaProducto__imagen">
-                        <h3 class="tarjetaProducto__nombre">Escritorio "Home Office"</h3>
-                        <p class="tarjetaProducto__precio">S/.890.00</p>
-                        <button class="tarjetaProducto__boton boton boton--secundario">Añadir al Carrito</button>
-                    </article>
+                <div class="productos__cabecera">
+                    <span class="subtituloSeccion">Nuestra Colección</span>
+                    <h2 class="productos__titulo">Catálogo de Muebles en Melamina</h2>
+                    <p class="productos__subtexto">Muebles diseñados a tu medida con melamina de 18mm resistente al uso diario, rayaduras y humedad.</p>
+                </div>
+
+                <!-- Barra de Filtros y Buscador E-commerce -->
+                <div class="catalogoControles">
+                    <div class="catalogoFiltros" id="filtrosCategoria">
+                        <button type="button" class="filtroBoton filtroBoton--activo" data-categoria="todos">Todos los Muebles</button>
+                        <button type="button" class="filtroBoton" data-categoria="cocina">Cocinas</button>
+                        <button type="button" class="filtroBoton" data-categoria="dormitorio">Dormitorios</button>
+                        <button type="button" class="filtroBoton" data-categoria="oficina">Oficina y Home Office</button>
+                        <button type="button" class="filtroBoton" data-categoria="sala">Salas y TV</button>
                     </div>
-                <a href="#" class="productos__verTodo boton boton--esquema">Ver Todo el Catálogo</a>
+                    <div class="catalogoBuscador">
+                        <input type="text" id="buscadorProductos" class="catalogoBuscador__input" placeholder="Buscar por modelo o tipo de mueble..." aria-label="Buscar productos">
+                    </div>
+                </div>
+
+                <div class="productos__infoConteo">
+                    <span id="conteoProductos">Mostrando 8 productos</span>
+                </div>
+
+                <div class="productos__rejilla" id="rejillaProductos">
+                    <!-- Producto 1 -->
+                    <article class="tarjetaProducto" data-categoria="dormitorio" data-nombre="Clóset Moderno Minimal">
+                        <div class="tarjetaProducto__imagenContenedor">
+                            <span class="tarjetaProducto__placa">Más Vendido</span>
+                            <img src="galeria/ropero_1.webp" alt="Clóset Moderno Minimal" class="tarjetaProducto__imagen">
+                            <button type="button" class="tarjetaProducto__vistaRapida" data-accion="ver-detalle" data-id="PROD-01">Ver Detalles</button>
+                        </div>
+                        <div class="tarjetaProducto__cuerpo">
+                            <span class="tarjetaProducto__categoria">Dormitorio</span>
+                            <h3 class="tarjetaProducto__nombre">Clóset Moderno "Minimal"</h3>
+                            <p class="tarjetaProducto__descripcion">6 puertas batientes, cajonería interna telescópica y zapatera integrada. Melamina 18mm.</p>
+                            <div class="tarjetaProducto__medidas">Medidas: 2.10m alto x 2.00m ancho x 0.55m fondo</div>
+                            <div class="tarjetaProducto__precios">
+                                <span class="tarjetaProducto__precioAnterior">S/ 2,850.00</span>
+                                <span class="tarjetaProducto__precio">S/ 2,450.00</span>
+                            </div>
+                            <button type="button" class="tarjetaProducto__boton boton boton--secundario btnAgregarCarrito" 
+                                data-id="PROD-01" 
+                                data-nombre="Clóset Moderno Minimal" 
+                                data-precio="2450" 
+                                data-imagen="galeria/ropero_1.webp" 
+                                data-categoria="Dormitorio">
+                                Añadir al Carrito
+                            </button>
+                        </div>
+                    </article>
+
+                    <!-- Producto 2 -->
+                    <article class="tarjetaProducto" data-categoria="oficina" data-nombre="Escritorio Ejecutivo Home Office">
+                        <div class="tarjetaProducto__imagenContenedor">
+                            <span class="tarjetaProducto__placa tarjetaProducto__placa--oferta">Oferta</span>
+                            <img src="galeria/escritorio_1.jpg" alt="Escritorio Home Office" class="tarjetaProducto__imagen">
+                            <button type="button" class="tarjetaProducto__vistaRapida" data-accion="ver-detalle" data-id="PROD-02">Ver Detalles</button>
+                        </div>
+                        <div class="tarjetaProducto__cuerpo">
+                            <span class="tarjetaProducto__categoria">Oficina</span>
+                            <h3 class="tarjetaProducto__nombre">Escritorio Ejecutivo "Home Office"</h3>
+                            <p class="tarjetaProducto__descripcion">Cajón con cerradura, gaveta archivadora y pasacables de aluminio pulido.</p>
+                            <div class="tarjetaProducto__medidas">Medidas: 1.20m ancho x 0.75m alto x 0.60m fondo</div>
+                            <div class="tarjetaProducto__precios">
+                                <span class="tarjetaProducto__precioAnterior">S/ 1,050.00</span>
+                                <span class="tarjetaProducto__precio">S/ 890.00</span>
+                            </div>
+                            <button type="button" class="tarjetaProducto__boton boton boton--secundario btnAgregarCarrito" 
+                                data-id="PROD-02" 
+                                data-nombre="Escritorio Ejecutivo Home Office" 
+                                data-precio="890" 
+                                data-imagen="galeria/escritorio_1.jpg" 
+                                data-categoria="Oficina">
+                                Añadir al Carrito
+                            </button>
+                        </div>
+                    </article>
+
+                    <!-- Producto 3 -->
+                    <article class="tarjetaProducto" data-categoria="cocina" data-nombre="Mueble de Cocina Integral Milán">
+                        <div class="tarjetaProducto__imagenContenedor">
+                            <span class="tarjetaProducto__placa tarjetaProducto__placa--premium">Recomendado</span>
+                            <img src="galeria/cocina_1.jpg" alt="Mueble de Cocina Milán" class="tarjetaProducto__imagen">
+                            <button type="button" class="tarjetaProducto__vistaRapida" data-accion="ver-detalle" data-id="PROD-03">Ver Detalles</button>
+                        </div>
+                        <div class="tarjetaProducto__cuerpo">
+                            <span class="tarjetaProducto__categoria">Cocina</span>
+                            <h3 class="tarjetaProducto__nombre">Cocina Integral "Milán"</h3>
+                            <p class="tarjetaProducto__descripcion">Melamina RH resistente a grasa y humedad, repisas altas y cajones con rieles cierre suave.</p>
+                            <div class="tarjetaProducto__medidas">Medidas: 2.40m largo total (módulo alto y bajo)</div>
+                            <div class="tarjetaProducto__precios">
+                                <span class="tarjetaProducto__precioAnterior">S/ 3,750.00</span>
+                                <span class="tarjetaProducto__precio">S/ 3,200.00</span>
+                            </div>
+                            <button type="button" class="tarjetaProducto__boton boton boton--secundario btnAgregarCarrito" 
+                                data-id="PROD-03" 
+                                data-nombre="Cocina Integral Milán" 
+                                data-precio="3200" 
+                                data-imagen="galeria/cocina_1.jpg" 
+                                data-categoria="Cocina">
+                                Añadir al Carrito
+                            </button>
+                        </div>
+                    </article>
+
+                    <!-- Producto 4 -->
+                    <article class="tarjetaProducto" data-categoria="dormitorio" data-nombre="Cama y Veladores Nordic">
+                        <div class="tarjetaProducto__imagenContenedor">
+                            <span class="tarjetaProducto__placa">Nuevo</span>
+                            <img src="galeria/dormitorio_1.jpg" alt="Dormitorio Nordic" class="tarjetaProducto__imagen">
+                            <button type="button" class="tarjetaProducto__vistaRapida" data-accion="ver-detalle" data-id="PROD-04">Ver Detalles</button>
+                        </div>
+                        <div class="tarjetaProducto__cuerpo">
+                            <span class="tarjetaProducto__categoria">Dormitorio</span>
+                            <h3 class="tarjetaProducto__nombre">Juego de Dormitorio "Nordic"</h3>
+                            <p class="tarjetaProducto__descripcion">Tarima Queen con 4 cajones inferiores zapateros y 2 veladores flotantes minimalistas.</p>
+                            <div class="tarjetaProducto__medidas">Medidas: Para colchón Queen 1.60m x 2.00m</div>
+                            <div class="tarjetaProducto__precios">
+                                <span class="tarjetaProducto__precioAnterior">S/ 2,150.00</span>
+                                <span class="tarjetaProducto__precio">S/ 1,850.00</span>
+                            </div>
+                            <button type="button" class="tarjetaProducto__boton boton boton--secundario btnAgregarCarrito" 
+                                data-id="PROD-04" 
+                                data-nombre="Juego de Dormitorio Nordic" 
+                                data-precio="1850" 
+                                data-imagen="galeria/dormitorio_1.jpg" 
+                                data-categoria="Dormitorio">
+                                Añadir al Carrito
+                            </button>
+                        </div>
+                    </article>
+
+                    <!-- Producto 5 -->
+                    <article class="tarjetaProducto" data-categoria="oficina" data-nombre="Estación de Trabajo en L Corporate">
+                        <div class="tarjetaProducto__imagenContenedor">
+                            <span class="tarjetaProducto__placa tarjetaProducto__placa--oferta">Garantía 2 Años</span>
+                            <img src="galeria/oficina_1.jpg" alt="Estación de Trabajo Corporate" class="tarjetaProducto__imagen">
+                            <button type="button" class="tarjetaProducto__vistaRapida" data-accion="ver-detalle" data-id="PROD-05">Ver Detalles</button>
+                        </div>
+                        <div class="tarjetaProducto__cuerpo">
+                            <span class="tarjetaProducto__categoria">Oficina</span>
+                            <h3 class="tarjetaProducto__nombre">Estación en "L" "Corporate"</h3>
+                            <p class="tarjetaProducto__descripcion">Escritorio esquinero de alto tránsito con credenza lateral y archivador metálico interno.</p>
+                            <div class="tarjetaProducto__medidas">Medidas: 1.60m x 1.40m x 0.75m alto</div>
+                            <div class="tarjetaProducto__precios">
+                                <span class="tarjetaProducto__precioAnterior">S/ 1,680.00</span>
+                                <span class="tarjetaProducto__precio">S/ 1,420.00</span>
+                            </div>
+                            <button type="button" class="tarjetaProducto__boton boton boton--secundario btnAgregarCarrito" 
+                                data-id="PROD-05" 
+                                data-nombre="Estación en L Corporate" 
+                                data-precio="1420" 
+                                data-imagen="galeria/oficina_1.jpg" 
+                                data-categoria="Oficina">
+                                Añadir al Carrito
+                            </button>
+                        </div>
+                    </article>
+
+                    <!-- Producto 6 -->
+                    <article class="tarjetaProducto" data-categoria="sala" data-nombre="Centro de Entretenimiento TV Viena">
+                        <div class="tarjetaProducto__imagenContenedor">
+                            <span class="tarjetaProducto__placa">Tendencia</span>
+                            <img src="galeria/carrusel_1.jpg" alt="Centro de Entretenimiento Viena" class="tarjetaProducto__imagen">
+                            <button type="button" class="tarjetaProducto__vistaRapida" data-accion="ver-detalle" data-id="PROD-06">Ver Detalles</button>
+                        </div>
+                        <div class="tarjetaProducto__cuerpo">
+                            <span class="tarjetaProducto__categoria">Salas y TV</span>
+                            <h3 class="tarjetaProducto__nombre">Centro de Entretenimiento "Viena"</h3>
+                            <p class="tarjetaProducto__descripcion">Panel flotante con canaletas ocultacables, repisa de cristal templado y mueble bajo.</p>
+                            <div class="tarjetaProducto__medidas">Medidas: 1.90m ancho x 1.70m alto (soporta TV hasta 75'')</div>
+                            <div class="tarjetaProducto__precios">
+                                <span class="tarjetaProducto__precioAnterior">S/ 1,490.00</span>
+                                <span class="tarjetaProducto__precio">S/ 1,290.00</span>
+                            </div>
+                            <button type="button" class="tarjetaProducto__boton boton boton--secundario btnAgregarCarrito" 
+                                data-id="PROD-06" 
+                                data-nombre="Centro de Entretenimiento Viena" 
+                                data-precio="1290" 
+                                data-imagen="galeria/carrusel_1.jpg" 
+                                data-categoria="Salas y TV">
+                                Añadir al Carrito
+                            </button>
+                        </div>
+                    </article>
+
+                    <!-- Producto 7 -->
+                    <article class="tarjetaProducto" data-categoria="cocina" data-nombre="Alacena y Repostero Aéreo Chef Pro">
+                        <div class="tarjetaProducto__imagenContenedor">
+                            <span class="tarjetaProducto__placa tarjetaProducto__placa--premium">Melamina RH</span>
+                            <img src="galeria/carrusel_2.jpg" alt="Repostero Chef Pro" class="tarjetaProducto__imagen">
+                            <button type="button" class="tarjetaProducto__vistaRapida" data-accion="ver-detalle" data-id="PROD-07">Ver Detalles</button>
+                        </div>
+                        <div class="tarjetaProducto__cuerpo">
+                            <span class="tarjetaProducto__categoria">Cocina</span>
+                            <h3 class="tarjetaProducto__nombre">Repostero Aéreo "Chef Pro"</h3>
+                            <p class="tarjetaProducto__descripcion">4 puertas elevables con pistones hidráulicos a gas y repisa especiera iluminada.</p>
+                            <div class="tarjetaProducto__medidas">Medidas: 1.80m largo x 0.65m alto x 0.35m fondo</div>
+                            <div class="tarjetaProducto__precios">
+                                <span class="tarjetaProducto__precioAnterior">S/ 1,950.00</span>
+                                <span class="tarjetaProducto__precio">S/ 1,650.00</span>
+                            </div>
+                            <button type="button" class="tarjetaProducto__boton boton boton--secundario btnAgregarCarrito" 
+                                data-id="PROD-07" 
+                                data-nombre="Repostero Aéreo Chef Pro" 
+                                data-precio="1650" 
+                                data-imagen="galeria/carrusel_2.jpg" 
+                                data-categoria="Cocina">
+                                Añadir al Carrito
+                            </button>
+                        </div>
+                    </article>
+
+                    <!-- Producto 8 -->
+                    <article class="tarjetaProducto" data-categoria="sala" data-nombre="Estantería Modular Cube">
+                        <div class="tarjetaProducto__imagenContenedor">
+                            <span class="tarjetaProducto__placa tarjetaProducto__placa--oferta">Destacado</span>
+                            <img src="galeria/carrusel_5.jpg" alt="Estantería Modular Cube" class="tarjetaProducto__imagen">
+                            <button type="button" class="tarjetaProducto__vistaRapida" data-accion="ver-detalle" data-id="PROD-08">Ver Detalles</button>
+                        </div>
+                        <div class="tarjetaProducto__cuerpo">
+                            <span class="tarjetaProducto__categoria">Salas y TV</span>
+                            <h3 class="tarjetaProducto__nombre">Estantería Modular "Cube"</h3>
+                            <p class="tarjetaProducto__descripcion">Librero organizador multifuncional para adornos, libros y colecciones en melamina 18mm.</p>
+                            <div class="tarjetaProducto__medidas">Medidas: 1.80m alto x 1.10m ancho x 0.30m fondo</div>
+                            <div class="tarjetaProducto__precios">
+                                <span class="tarjetaProducto__precioAnterior">S/ 920.00</span>
+                                <span class="tarjetaProducto__precio">S/ 780.00</span>
+                            </div>
+                            <button type="button" class="tarjetaProducto__boton boton boton--secundario btnAgregarCarrito" 
+                                data-id="PROD-08" 
+                                data-nombre="Estantería Modular Cube" 
+                                data-precio="780" 
+                                data-imagen="galeria/carrusel_5.jpg" 
+                                data-categoria="Salas y TV">
+                                Añadir al Carrito
+                            </button>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="productos__accionesFinales">
+                    <a href="#cotizacion" class="boton boton--esquema">¿Deseas medidas personalizadas? Solicita cotización aquí</a>
+                </div>
             </div>
         </section>
 
@@ -230,6 +459,15 @@
             </div>
         </div>
     </footer>
+
+    <!-- Modal Vista Rapida de Producto -->
+    <div class="modalContenedor" id="modalProductoDetalle" aria-hidden="true">
+        <div class="modalContenedor__overlay" id="overlayModalProducto"></div>
+        <div class="modalContenedor__caja modalContenedor__caja--producto">
+            <button type="button" class="modalContenedor__cerrar" id="btnCerrarModalProducto" aria-label="Cerrar ventana">&times;</button>
+            <div class="detalleProductoModal" id="contenidoDetalleProducto"></div>
+        </div>
+    </div>
 
     <script src="app.js"></script>
 </body>
