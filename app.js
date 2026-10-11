@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     inicializarLibroReclamaciones();
     inicializarCotizacionesYToast();
     inicializarTerminosCondiciones();
+    inicializarPoliticaPrivacidad();
 });
 
 // --------------------------------------------------------
@@ -1057,3 +1058,38 @@ function inicializarTerminosCondiciones() {
     if (overlay) overlay.addEventListener('click', cerrarModal);
     if (btnEntendido) btnEntendido.addEventListener('click', cerrarModal);
 }
+
+// --------------------------------------------------------
+// 8. POLITICA DE PRIVACIDAD Y DERECHOS ARCO (LEY N° 29733)
+// --------------------------------------------------------
+function inicializarPoliticaPrivacidad() {
+    const modal = document.getElementById('modalPrivacidad');
+    const btnCerrar = document.getElementById('btnCerrarPrivacidad');
+    const overlay = document.getElementById('overlayModalPrivacidad');
+    const btnEntendido = document.getElementById('btnEntendidoPrivacidad');
+
+    function abrirModal() {
+        if (!modal) return;
+        modal.classList.add('modalContenedor--activo');
+        modal.setAttribute('aria-hidden', 'false');
+    }
+
+    function cerrarModal() {
+        if (!modal) return;
+        modal.classList.remove('modalContenedor--activo');
+        modal.setAttribute('aria-hidden', 'true');
+    }
+
+    document.addEventListener('click', (e) => {
+        const enlace = e.target.closest('a[href="#politica-privacidad"]');
+        if (enlace) {
+            e.preventDefault();
+            abrirModal();
+        }
+    });
+
+    if (btnCerrar) btnCerrar.addEventListener('click', cerrarModal);
+    if (overlay) overlay.addEventListener('click', cerrarModal);
+    if (btnEntendido) btnEntendido.addEventListener('click', cerrarModal);
+}
+
