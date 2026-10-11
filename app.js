@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     inicializarCarrito();
     inicializarAutenticacion();
     inicializarLibroReclamaciones();
+    inicializarCotizacionesYToast();
 });
 
 // --------------------------------------------------------
@@ -531,6 +532,7 @@ function agregarProductoAlCarrito(producto) {
     }
     guardarCarritoEnStorage();
     renderizarCarritoUI();
+    mostrarToast(`Se añadió "${producto.nombre}" al carrito`);
 }
 
 function cambiarCantidadItem(id, delta) {
@@ -982,6 +984,45 @@ function inicializarLibroReclamaciones() {
         });
     }
 }
+
+// --------------------------------------------------------
+// 6. SISTEMA DE NOTIFICACIONES TOAST Y COTIZACION
+// --------------------------------------------------------
+let temporizadorToast = null;
+
+function mostrarToast(mensaje, duracion = 3500) {
+    const contenedor = document.getElementById('toastNotificacion');
+    if (!contenedor) return;
+
+    if (temporizadorToast) {
+        clearTimeout(temporizadorToast);
+    }
+
+    contenedor.textContent = mensaje;
+    contenedor.classList.add('toastNotificacion--activo');
+
+    temporizadorToast = setTimeout(() => {
+        contenedor.classList.remove('toastNotificacion--activo');
+        temporizadorToast = null;
+    }, duracion);
+}
+
+function inicializarCotizacionesYToast() {
+    const formCotizacion = document.querySelector('.formularioCotizacion__formulario');
+    if (formCotizacion) {
+        formCotizacion.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const nombre = document.getElementById('nombre')?.value || 'Cliente';
+            const email = document.getElementById('email')?.value || '';
+            const telefono = document.getElementById('telefono')?.value || '';
+
+            mostrarToast(`¡Gracias ${nombre}! Tu cotización fue enviada con éxito. Te responderemos al ${email || telefono} a la brevedad.`);
+            formCotizacion.reset();
+        });
+    }
+}
+
 
 
 
