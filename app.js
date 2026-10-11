@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     inicializarTerminosCondiciones();
     inicializarPoliticaPrivacidad();
     inicializarEnviosYGarantias();
+    inicializarBannerCookies();
 });
 
 // --------------------------------------------------------
@@ -1127,3 +1128,47 @@ function inicializarEnviosYGarantias() {
     if (overlay) overlay.addEventListener('click', cerrarModal);
     if (btnEntendido) btnEntendido.addEventListener('click', cerrarModal);
 }
+
+// --------------------------------------------------------
+// 10. AVISO DE COOKIES Y CONSENTIMIENTO DE NAVEGACION
+// --------------------------------------------------------
+const CLAVE_COOKIES_STORAGE = 'ambienta_consentimiento_cookies';
+
+function inicializarBannerCookies() {
+    const banner = document.getElementById('bannerCookies');
+    const btnAceptar = document.getElementById('btnAceptarCookies');
+    const btnRechazar = document.getElementById('btnRechazarCookies');
+
+    if (!banner) return;
+
+    const consentimiento = localStorage.getItem(CLAVE_COOKIES_STORAGE);
+    if (!consentimiento) {
+        banner.style.display = 'block';
+        setTimeout(() => {
+            banner.classList.add('bannerCookies--visible');
+        }, 600);
+    }
+
+    function ocultarBanner(decision) {
+        localStorage.setItem(CLAVE_COOKIES_STORAGE, decision);
+        banner.classList.remove('bannerCookies--visible');
+        setTimeout(() => {
+            banner.style.display = 'none';
+        }, 400);
+    }
+
+    if (btnAceptar) {
+        btnAceptar.addEventListener('click', () => {
+            ocultarBanner('todas');
+            mostrarToast('Preferencias de navegación y cookies guardadas con éxito.');
+        });
+    }
+
+    if (btnRechazar) {
+        btnRechazar.addEventListener('click', () => {
+            ocultarBanner('necesarias');
+            mostrarToast('Se han guardado únicamente las cookies técnicas necesarias.');
+        });
+    }
+}
+

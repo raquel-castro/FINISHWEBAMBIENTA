@@ -1917,6 +1917,99 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 /* ========================================= */
+/* --- BANNER DE CONSENTIMIENTO DE COOKIES --- */
+/* ========================================= */
+.bannerCookies {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #1e293b;
+    color: #f8fafc;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.25);
+    z-index: 10000;
+    border-top: 2px solid #3f51b5;
+    transform: translateY(100%);
+    opacity: 0;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+.bannerCookies--visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+.bannerCookies__contenedor {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+.bannerCookies__contenido {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+    min-width: 280px;
+}
+.bannerCookies__icono {
+    color: #818cf8;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background-color: rgba(63, 81, 181, 0.2);
+}
+.bannerCookies__texto {
+    text-align: left;
+}
+.bannerCookies__titulo {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 4px;
+}
+.bannerCookies__descripcion {
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    line-height: 1.45;
+    margin: 0;
+}
+.bannerCookies__enlace {
+    color: #93c5fd;
+    text-decoration: underline;
+    font-weight: 600;
+}
+.bannerCookies__enlace:hover {
+    color: #ffffff;
+}
+.bannerCookies__acciones {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.bannerCookies__btn {
+    padding: 9px 18px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+@media (max-width: 768px) {
+    .bannerCookies__contenedor {
+        padding: 14px 16px;
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .bannerCookies__acciones {
+        justify-content: flex-end;
+    }
+}
+
+/* ========================================= */
 /* --- ANIMACIONES --- */
 /* ========================================= */
 
