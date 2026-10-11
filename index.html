@@ -47,13 +47,33 @@
     <main>
     <section id="inicio" class="hero">
     <!-- Carrusel de imágenes -->
-        <div class="hero__carousel">
-            <div class="hero__slides">
-                <img src="galeria/carrusel_1.jpg" alt="Mueble 1">
-                <img src="galeria/carrusel_2.jpg" alt="Mueble 2">
-                <img src="galeria/carrusel_3.jpeg" alt="Mueble 3">
-                <img src="galeria/carrusel_4.jpg" alt="Mueble 4">
-                <img src="galeria/carrusel_5.jpg" alt="Mueble 5">   
+        <div class="hero__carousel" id="heroCarousel">
+            <div class="hero__slides" id="heroSlides">
+                <div class="hero__slide hero__slide--activo">
+                    <img src="galeria/carrusel_1.jpg" alt="Mueble de sala y estanteria">
+                </div>
+                <div class="hero__slide">
+                    <img src="galeria/carrusel_2.jpg" alt="Cocina integral de melamina">
+                </div>
+                <div class="hero__slide">
+                    <img src="galeria/carrusel_3.jpeg" alt="Dormitorio y ropero moderno">
+                </div>
+                <div class="hero__slide">
+                    <img src="galeria/carrusel_4.jpg" alt="Escritorio para home office">
+                </div>
+                <div class="hero__slide">
+                    <img src="galeria/carrusel_5.jpg" alt="Centro de entretenimiento">
+                </div>
+            </div>
+            <!-- Controles de navegacion -->
+            <button class="hero__control hero__control--prev" id="carruselPrev" aria-label="Imagen anterior" type="button">&#10094;</button>
+            <button class="hero__control hero__control--next" id="carruselNext" aria-label="Imagen siguiente" type="button">&#10095;</button>
+            <div class="hero__indicadores" id="carruselIndicadores">
+                <button class="hero__punto hero__punto--activo" data-slide="0" aria-label="Slide 1" type="button"></button>
+                <button class="hero__punto" data-slide="1" aria-label="Slide 2" type="button"></button>
+                <button class="hero__punto" data-slide="2" aria-label="Slide 3" type="button"></button>
+                <button class="hero__punto" data-slide="3" aria-label="Slide 4" type="button"></button>
+                <button class="hero__punto" data-slide="4" aria-label="Slide 5" type="button"></button>
             </div>
         </div>
 
@@ -62,7 +82,8 @@
             <h1 class="hero__title">Muebles de Melamina con Estilo y Durabilidad</h1>
             <h2 class="hero__subtitle animar">Diseñamos espacios funcionales para tu hogar y oficina.</h2>
             <div class="hero__buttons">
-                <a href="#proyectos" class="button button--primary">Explorar Catálogo</a>
+                <a href="#catalogo" class="boton boton--primario">Explorar Catálogo</a>
+                <a href="#cotizacion" class="boton boton--secundario">Cotizar Proyecto</a>
             </div>
         </div>
     </section>
@@ -191,5 +212,6 @@
         </div>
     </footer>
 
-    </body>
+    <script src="app.js"></script>
+</body>
 </html>
