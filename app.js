@@ -5,6 +5,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     inicializarCarrusel();
     inicializarCatalogo();
+    inicializarCarrito();
 });
 
 // --------------------------------------------------------
@@ -314,4 +315,311 @@ function inicializarCatalogo() {
         }
     });
 }
+
+// --------------------------------------------------------
+// 3. CARRITO DE COMPRAS Y PROCESO DE CHECKOUT
+// --------------------------------------------------------
+const CLAVE_CARRITO_STORAGE = 'ambienta_carrito_compras';
+let carrito = [];
+
+function cargarCarritoDeStorage() {
+    try {
+        const datos = localStorage.getItem(CLAVE_CARRITO_STORAGE);
+        return datos ? JSON.parse(datos) : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+function guardarCarritoEnStorage() {
+    try {
+        localStorage.setItem(CLAVE_CARRITO_STORAGE, JSON.stringify(carrito));
+    } catch (e) {
+        console.error('Error al guardar carrito:', e);
+    }
+}
+
+function inicializarCarrito() {
+    carrito = cargarCarritoDeStorage();
+
+    const btnAbrir = document.getElementById('btnAbrirCarrito');
+    const btnCerrar = document.getElementById('btnCerrarCarrito');
+    const btnSeguirComprando = document.getElementById('btnSeguirComprando');
+    const btnVaciar = document.getElementById('btnVaciarCarrito');
+    const btnProcederPago = document.getElementById('btnProcederPago');
+    const drawer = document.getElementById('drawerCarrito');
+    const overlay = document.getElementById('overlayCarrito');
+
+    function abrirDrawer() {
+        if (!drawer) return;
+        renderizarCarritoUI();
+        drawer.classList.add('carritoDrawer--activo');
+        drawer.setAttribute('aria-hidden', 'false');
+    }
+
+    function cerrarDrawer() {
+        if (!drawer) return;
+        drawer.classList.remove('carritoDrawer--activo');
+        drawer.setAttribute('aria-hidden', 'true');
+    }
+
+    if (btnAbrir) btnAbrir.addEventListener('click', abrirDrawer);
+    if (btnCerrar) btnCerrar.addEventListener('click', cerrarDrawer);
+    if (overlay) overlay.addEventListener('click', cerrarDrawer);
+    if (btnSeguirComprando) btnSeguirComprando.addEventListener('click', cerrarDrawer);
+
+    if (btnVaciar) {
+        btnVaciar.addEventListener('click', () => {
+            if (carrito.length === 0) return;
+            if (confirm('¿Deseas vaciar todos los muebles del carrito?')) {
+                carrito = [];
+                guardarCarritoEnStorage();
+                renderizarCarritoUI();
+            }
+        });
+    }
+
+    // Delegacion de eventos para agregar al carrito
+    document.addEventListener('click', (e) => {
+        const btnAgregar = e.target.closest('.btnAgregarCarrito');
+        if (btnAgregar) {
+            const id = btnAgregar.getAttribute('data-id');
+            const nombre = btnAgregar.getAttribute('data-nombre');
+            const precio = parseFloat(btnAgregar.getAttribute('data-precio') || '0');
+            const imagen = btnAgregar.getAttribute('data-imagen');
+            const categoria = btnAgregar.getAttribute('data-categoria') || 'Muebles';
+
+            agregarProductoAlCarrito({ id, nombre, precio, imagen, categoria });
+            abrirDrawer();
+        }
+    });
+
+    // Delegacion de controles dentro del drawer (incrementar, decrementar, eliminar)
+    const listaItems = document.getElementById('listaItemsCarrito');
+    if (listaItems) {
+        listaItems.addEventListener('click', (e) => {
+            const btnSumar = e.target.closest('.btnSumarCantidad');
+            const btnRestar = e.target.closest('.btnRestarCantidad');
+            const btnEliminar = e.target.closest('.btnEliminarItem');
+
+            if (btnSumar) {
+                const id = btnSumar.getAttribute('data-id');
+                cambiarCantidadItem(id, 1);
+            } else if (btnRestar) {
+                const id = btnRestar.getAttribute('data-id');
+                cambiarCantidadItem(id, -1);
+            } else if (btnEliminar) {
+                const id = btnEliminar.getAttribute('data-id');
+                eliminarItem(id);
+            }
+        });
+    }
+
+    // Proceso de Checkout
+    const modalCheckout = document.getElementById('modalCheckout');
+    const btnCerrarCheckout = document.getElementById('btnCerrarCheckout');
+    const overlayCheckout = document.getElementById('overlayModalCheckout');
+    const formCheckout = document.getElementById('formularioCheckout');
+    const checkoutTotalTexto = document.getElementById('checkoutTotalTexto');
+    const checkoutFormularioContenedor = document.getElementById('checkoutFormularioContenedor');
+    const checkoutExitoContenedor = document.getElementById('checkoutExitoContenedor');
+    const btnCerrarExito = document.getElementById('btnCerrarExitoCheckout');
+
+    if (btnProcederPago) {
+        btnProcederPago.addEventListener('click', () => {
+            if (carrito.length === 0) {
+                alert('Tu carrito está vacío. Agrega al menos un mueble para proceder al pago.');
+                return;
+            }
+            cerrarDrawer();
+
+            // Calcular total a mostrar en checkout
+            const subtotal = carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
+            const costoEnvio = subtotal >= 500 ? 0 : 35;
+            const total = subtotal + costoEnvio;
+
+            if (checkoutTotalTexto) {
+                checkoutTotalTexto.textContent = `S/ ${total.toFixed(2)}`;
+            }
+
+            if (checkoutFormularioContenedor) checkoutFormularioContenedor.style.display = 'block';
+            if (checkoutExitoContenedor) checkoutExitoContenedor.style.display = 'none';
+
+            if (modalCheckout) {
+                modalCheckout.classList.add('modalContenedor--activo');
+                modalCheckout.setAttribute('aria-hidden', 'false');
+            }
+        });
+    }
+
+    function cerrarCheckout() {
+        if (!modalCheckout) return;
+        modalCheckout.classList.remove('modalContenedor--activo');
+        modalCheckout.setAttribute('aria-hidden', 'true');
+    }
+
+    if (btnCerrarCheckout) btnCerrarCheckout.addEventListener('click', cerrarCheckout);
+    if (overlayCheckout) overlayCheckout.addEventListener('click', cerrarCheckout);
+
+    if (formCheckout) {
+        formCheckout.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const nombre = document.getElementById('checkoutNombre')?.value || 'Cliente';
+            const dni = document.getElementById('checkoutDni')?.value || '';
+            const telefono = document.getElementById('checkoutTelefono')?.value || '';
+            const direccion = document.getElementById('checkoutDireccion')?.value || '';
+            const distrito = document.getElementById('checkoutDistrito')?.value || '';
+            const metodoPago = formCheckout.querySelector('input[name="metodoPago"]:checked')?.value || 'yape';
+
+            const subtotal = carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
+            const costoEnvio = subtotal >= 500 ? 0 : 35;
+            const total = subtotal + costoEnvio;
+
+            const codigoOrden = 'PED-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+
+            // Mostrar pantalla de exito
+            if (checkoutFormularioContenedor) checkoutFormularioContenedor.style.display = 'none';
+            if (checkoutExitoContenedor) checkoutExitoContenedor.style.display = 'block';
+
+            const codElem = document.getElementById('checkoutCodigoOrden');
+            if (codElem) codElem.textContent = codigoOrden;
+
+            const detalleResumen = document.getElementById('checkoutDetalleResumen');
+            if (detalleResumen) {
+                detalleResumen.innerHTML = `
+                    <p><strong>Destinatario:</strong> ${nombre} (DNI: ${dni})</p>
+                    <p><strong>Contacto:</strong> ${telefono}</p>
+                    <p><strong>Dirección:</strong> ${direccion}, ${distrito}</p>
+                    <p><strong>Método de Pago:</strong> ${metodoPago.toUpperCase()}</p>
+                    <p><strong>Monto Total:</strong> S/ ${total.toFixed(2)} (${carrito.reduce((acc, i) => acc + i.cantidad, 0)} muebles)</p>
+                    <p style="margin-top: 8px; color: #16a34a; font-weight: 600;">Se ha enviado un correo con la confirmación de la orden.</p>
+                `;
+            }
+
+            // Vaciar carrito tras concretar pedido
+            carrito = [];
+            guardarCarritoEnStorage();
+            renderizarCarritoUI();
+            formCheckout.reset();
+        });
+    }
+
+    if (btnCerrarExito) {
+        btnCerrarExito.addEventListener('click', cerrarCheckout);
+    }
+
+    // Renderizado inicial al cargar la pagina
+    renderizarCarritoUI();
+}
+
+function agregarProductoAlCarrito(producto) {
+    const itemExistente = carrito.find(item => item.id === producto.id);
+    if (itemExistente) {
+        itemExistente.cantidad += 1;
+    } else {
+        carrito.push({
+            id: producto.id,
+            nombre: producto.nombre,
+            precio: producto.precio,
+            imagen: producto.imagen,
+            categoria: producto.categoria,
+            cantidad: 1
+        });
+    }
+    guardarCarritoEnStorage();
+    renderizarCarritoUI();
+}
+
+function cambiarCantidadItem(id, delta) {
+    const item = carrito.find(i => i.id === id);
+    if (!item) return;
+
+    item.cantidad += delta;
+    if (item.cantidad <= 0) {
+        eliminarItem(id);
+        return;
+    }
+    guardarCarritoEnStorage();
+    renderizarCarritoUI();
+}
+
+function eliminarItem(id) {
+    carrito = carrito.filter(i => i.id !== id);
+    guardarCarritoEnStorage();
+    renderizarCarritoUI();
+}
+
+function renderizarCarritoUI() {
+    const contadorEncabezado = document.getElementById('contadorCarrito');
+    const drawerContador = document.getElementById('drawerContadorItems');
+    const contenedorLista = document.getElementById('listaItemsCarrito');
+    const elemSubtotal = document.getElementById('cartSubtotal');
+    const elemIgv = document.getElementById('cartIgv');
+    const elemEnvio = document.getElementById('cartEnvio');
+    const elemTotal = document.getElementById('cartTotal');
+
+    const totalCantidad = carrito.reduce((acc, item) => acc + item.cantidad, 0);
+
+    if (contadorEncabezado) contadorEncabezado.textContent = totalCantidad;
+    if (drawerContador) drawerContador.textContent = `(${totalCantidad})`;
+
+    if (!contenedorLista) return;
+
+    if (carrito.length === 0) {
+        contenedorLista.innerHTML = `
+            <div class="carritoVacio">
+                <svg class="carritoVacio__icono" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <h4 class="carritoVacio__titulo">Tu carrito está vacío</h4>
+                <p class="carritoVacio__texto">Aún no has seleccionado muebles de melamina. Revisa nuestro catálogo y añade tus favoritos.</p>
+                <a href="#catalogo" class="boton boton--primario" onclick="document.getElementById('drawerCarrito')?.classList.remove('carritoDrawer--activo')">Ver Catálogo</a>
+            </div>
+        `;
+
+        if (elemSubtotal) elemSubtotal.textContent = 'S/ 0.00';
+        if (elemIgv) elemIgv.textContent = 'S/ 0.00';
+        if (elemEnvio) elemEnvio.textContent = 'S/ 0.00';
+        if (elemTotal) elemTotal.textContent = 'S/ 0.00';
+        return;
+    }
+
+    const subtotal = carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
+    // IGV del 18% incluido
+    const igv = subtotal - (subtotal / 1.18);
+    const costoEnvio = subtotal >= 500 ? 0 : 35;
+    const total = subtotal + costoEnvio;
+
+    contenedorLista.innerHTML = carrito.map(item => `
+        <div class="itemCarrito">
+            <img src="${item.imagen}" alt="${item.nombre}" class="itemCarrito__imagen">
+            <div class="itemCarrito__detalles">
+                <h4 class="itemCarrito__nombre">${item.nombre}</h4>
+                <div class="itemCarrito__precio">S/ ${(item.precio * item.cantidad).toFixed(2)}</div>
+                <div class="itemCarrito__controles">
+                    <button type="button" class="itemCarrito__btnCantidad btnRestarCantidad" data-id="${item.id}" aria-label="Disminuir">-</button>
+                    <span class="itemCarrito__cantidad">${item.cantidad}</span>
+                    <button type="button" class="itemCarrito__btnCantidad btnSumarCantidad" data-id="${item.id}" aria-label="Aumentar">+</button>
+                </div>
+            </div>
+            <button type="button" class="itemCarrito__btnEliminar btnEliminarItem" data-id="${item.id}" aria-label="Eliminar producto" title="Eliminar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                </svg>
+            </button>
+        </div>
+    `).join('');
+
+    if (elemSubtotal) elemSubtotal.textContent = `S/ ${subtotal.toFixed(2)}`;
+    if (elemIgv) elemIgv.textContent = `S/ ${igv.toFixed(2)}`;
+    if (elemEnvio) elemEnvio.textContent = costoEnvio === 0 ? 'Gratis' : `S/ ${costoEnvio.toFixed(2)}`;
+    if (elemTotal) elemTotal.textContent = `S/ ${total.toFixed(2)}`;
+}
+
 

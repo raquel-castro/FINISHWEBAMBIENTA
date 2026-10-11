@@ -469,6 +469,190 @@
         </div>
     </div>
 
+    <!-- Panel Lateral Carrito de Compras -->
+    <div class="carritoDrawer" id="drawerCarrito" aria-hidden="true">
+        <div class="carritoDrawer__overlay" id="overlayCarrito"></div>
+        <aside class="carritoDrawer__panel">
+            <div class="carritoDrawer__cabecera">
+                <div class="carritoDrawer__tituloContenedor">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="iconoSvg">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <h3 class="carritoDrawer__titulo">Carrito de Compras</h3>
+                    <span class="carritoDrawer__contador" id="drawerContadorItems">(0)</span>
+                </div>
+                <button type="button" class="carritoDrawer__cerrar" id="btnCerrarCarrito" aria-label="Cerrar carrito">&times;</button>
+            </div>
+
+            <!-- Lista de items en el carrito -->
+            <div class="carritoDrawer__cuerpo" id="listaItemsCarrito">
+                <!-- Se inyecta dinamicamente con JS -->
+            </div>
+
+            <!-- Resumen y Acciones -->
+            <div class="carritoDrawer__pie" id="pieCarrito">
+                <div class="carritoDrawer__resumenFila">
+                    <span>Subtotal:</span>
+                    <span id="cartSubtotal" class="carritoDrawer__monto">S/ 0.00</span>
+                </div>
+                <div class="carritoDrawer__resumenFila">
+                    <span>IGV (18% incluido):</span>
+                    <span id="cartIgv" class="carritoDrawer__monto">S/ 0.00</span>
+                </div>
+                <div class="carritoDrawer__resumenFila">
+                    <span>Envío a Lima:</span>
+                    <span id="cartEnvio" class="carritoDrawer__monto">Gratis</span>
+                </div>
+                <div class="carritoDrawer__resumenFila carritoDrawer__resumenFila--total">
+                    <span>Total a Pagar:</span>
+                    <span id="cartTotal" class="carritoDrawer__totalMonto">S/ 0.00</span>
+                </div>
+
+                <div class="carritoDrawer__botones">
+                    <button type="button" id="btnProcederPago" class="boton boton--primario carritoDrawer__btnPago">Proceder al Pago</button>
+                    <div class="carritoDrawer__accionesSecundarias">
+                        <button type="button" id="btnVaciarCarrito" class="carritoDrawer__enlaceAccion">Vaciar Carrito</button>
+                        <button type="button" id="btnSeguirComprando" class="carritoDrawer__enlaceAccion">Seguir Comprando</button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Modal Finalizar Compra / Checkout -->
+    <div class="modalContenedor" id="modalCheckout" aria-hidden="true">
+        <div class="modalContenedor__overlay" id="overlayModalCheckout"></div>
+        <div class="modalContenedor__caja modalContenedor__caja--checkout">
+            <button type="button" class="modalContenedor__cerrar" id="btnCerrarCheckout" aria-label="Cerrar ventana">&times;</button>
+            
+            <div id="checkoutFormularioContenedor">
+                <div class="checkoutEncabezado">
+                    <h3 class="checkoutEncabezado__titulo">Finalizar Pedido</h3>
+                    <p class="checkoutEncabezado__subtitulo">Completa los datos de despacho y selecciona tu método de pago seguro.</p>
+                </div>
+
+                <form id="formularioCheckout" class="checkoutForm">
+                    <div class="checkoutForm__seccion">
+                        <h4 class="checkoutForm__tituloSeccion">1. Datos Personales</h4>
+                        <div class="checkoutForm__grid">
+                            <div class="checkoutForm__campo">
+                                <label for="checkoutNombre" class="checkoutForm__label">Nombres y Apellidos *</label>
+                                <input type="text" id="checkoutNombre" required class="checkoutForm__input" placeholder="Ej. Carlos Mendoza">
+                            </div>
+                            <div class="checkoutForm__campo">
+                                <label for="checkoutDni" class="checkoutForm__label">DNI / CE *</label>
+                                <input type="text" id="checkoutDni" required maxlength="12" class="checkoutForm__input" placeholder="Ej. 74859612">
+                            </div>
+                            <div class="checkoutForm__campo">
+                                <label for="checkoutTelefono" class="checkoutForm__label">Teléfono / WhatsApp *</label>
+                                <input type="tel" id="checkoutTelefono" required class="checkoutForm__input" placeholder="Ej. 994 123 456">
+                            </div>
+                            <div class="checkoutForm__campo">
+                                <label for="checkoutEmail" class="checkoutForm__label">Correo Electrónico *</label>
+                                <input type="email" id="checkoutEmail" required class="checkoutForm__input" placeholder="ejemplo@correo.com">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkoutForm__seccion">
+                        <h4 class="checkoutForm__tituloSeccion">2. Dirección de Entrega (Lima y Callao)</h4>
+                        <div class="checkoutForm__grid">
+                            <div class="checkoutForm__campo checkoutForm__campo--full">
+                                <label for="checkoutDireccion" class="checkoutForm__label">Dirección exacta *</label>
+                                <input type="text" id="checkoutDireccion" required class="checkoutForm__input" placeholder="Av., Calle, Nro, Dpto / Interior">
+                            </div>
+                            <div class="checkoutForm__campo">
+                                <label for="checkoutDistrito" class="checkoutForm__label">Distrito *</label>
+                                <select id="checkoutDistrito" required class="checkoutForm__select">
+                                    <option value="">Selecciona distrito...</option>
+                                    <option value="Miraflores">Miraflores</option>
+                                    <option value="San Isidro">San Isidro</option>
+                                    <option value="Surco">Santiago de Surco</option>
+                                    <option value="San Borja">San Borja</option>
+                                    <option value="La Molina">La Molina</option>
+                                    <option value="Jesus Maria">Jesús María</option>
+                                    <option value="Lince">Lince</option>
+                                    <option value="Magdalena">Magdalena del Mar</option>
+                                    <option value="Pueblo Libre">Pueblo Libre</option>
+                                    <option value="San Miguel">San Miguel</option>
+                                    <option value="Lima Cercado">Lima Cercado</option>
+                                    <option value="Los Olivos">Los Olivos</option>
+                                    <option value="San Martin de Porres">San Martín de Porres</option>
+                                    <option value="Chorrillos">Chorrillos</option>
+                                    <option value="Ate">Ate</option>
+                                    <option value="Callao">Callao / Bellavista</option>
+                                    <option value="Otro">Otro distrito de Lima</option>
+                                </select>
+                            </div>
+                            <div class="checkoutForm__campo">
+                                <label for="checkoutReferencia" class="checkoutForm__label">Referencia de entrega</label>
+                                <input type="text" id="checkoutReferencia" class="checkoutForm__input" placeholder="Cerca al parque, frente a tienda...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkoutForm__seccion">
+                        <h4 class="checkoutForm__tituloSeccion">3. Método de Pago</h4>
+                        <div class="checkoutMetodosPago">
+                            <label class="metodoPagoOpcion">
+                                <input type="radio" name="metodoPago" value="yape" checked>
+                                <div class="metodoPagoOpcion__info">
+                                    <strong>Yape / Plin</strong>
+                                    <span>Pago inmediato escaneando QR o al 994 333 225</span>
+                                </div>
+                            </label>
+                            <label class="metodoPagoOpcion">
+                                <input type="radio" name="metodoPago" value="transferencia">
+                                <div class="metodoPagoOpcion__info">
+                                    <strong>Transferencia Bancaria BCP / BBVA</strong>
+                                    <span>Depósito directo a cuenta corriente empresarial</span>
+                                </div>
+                            </label>
+                            <label class="metodoPagoOpcion">
+                                <input type="radio" name="metodoPago" value="tarjeta">
+                                <div class="metodoPagoOpcion__info">
+                                    <strong>Tarjeta de Crédito o Débito</strong>
+                                    <span>Visa, Mastercard, American Express</span>
+                                </div>
+                            </label>
+                            <label class="metodoPagoOpcion">
+                                <input type="radio" name="metodoPago" value="contraentrega">
+                                <div class="metodoPagoOpcion__info">
+                                    <strong>Contra Entrega (50% adelanto)</strong>
+                                    <span>Pagas el saldo restante cuando tu mueble esté instalado</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="checkoutForm__resumenFinal">
+                        <div class="checkoutForm__totalTexto">
+                            Total a confirmar: <strong id="checkoutTotalTexto">S/ 0.00</strong>
+                        </div>
+                        <button type="submit" class="boton boton--primario checkoutForm__btnConfirmar">Confirmar y Emitir Pedido</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Pantalla de Pedido Confirmado -->
+            <div id="checkoutExitoContenedor" style="display: none;" class="checkoutExito">
+                <div class="checkoutExito__icono">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                </div>
+                <h3 class="checkoutExito__titulo">¡Pedido Registrado con Éxito!</h3>
+                <p class="checkoutExito__codigo">Código de Orden: <strong id="checkoutCodigoOrden">PED-2026-0001</strong></p>
+                <p class="checkoutExito__mensaje">Hemos recibido tu solicitud de compra. Un asesor de Ambienta se comunicará contigo vía WhatsApp en los próximos minutos para coordinar la fecha exacta de fabricación y despacho.</p>
+                <div class="checkoutExito__detalles" id="checkoutDetalleResumen"></div>
+                <button type="button" id="btnCerrarExitoCheckout" class="boton boton--primario" style="margin-top: 20px;">Volver a la Tienda</button>
+            </div>
+        </div>
+    </div>
+
     <script src="app.js"></script>
 </body>
 </html>
