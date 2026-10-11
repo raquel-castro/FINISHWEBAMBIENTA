@@ -506,16 +506,18 @@
                 <p class="pieDePagina__texto">Central Telefónica: <a href="tel:+51994333225" class="pieDePagina__enlace">994 333 225</a></p>
                 <p class="pieDePagina__texto">Horario: Lun a Sáb de 9:00 am a 7:00 pm</p>
             </div>
-            <div class="pieDePagina__seccion pieDePagina__seccion--social">
-                <h3 class="pieDePagina__titulo">Canales Oficiales</h3>
-                <div class="pieDePagina__iconosSociales">
+            <div class="pieDePagina__seccion pieDePagina__seccion--legal">
+                <h3 class="pieDePagina__titulo">Marco Legal y Políticas</h3>
+                <ul class="pieDePagina__listaLegal">
+                    <li><a href="#terminos-condiciones" id="enlaceFooterTerminos" class="pieDePagina__enlace">Términos y Condiciones</a></li>
+                    <li><a href="#politica-privacidad" id="enlaceFooterPrivacidad" class="pieDePagina__enlace">Política de Privacidad (Ley 29733)</a></li>
+                    <li><a href="#envios-garantias" id="enlaceFooterEnvios" class="pieDePagina__enlace">Políticas de Envío y Despacho</a></li>
+                    <li><a href="#envios-garantias" id="enlaceFooterGarantias" class="pieDePagina__enlace">Garantía de Calidad y Cambios</a></li>
+                </ul>
+                <div class="pieDePagina__iconosSociales" style="margin-top: 14px;">
                     <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="pieDePagina__enlaceSocial">Facebook</a>
                     <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="pieDePagina__enlaceSocial">Instagram</a>
                     <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="pieDePagina__enlaceSocial">TikTok</a>
-                </div>
-                <div style="margin-top: 16px;">
-                    <a href="#catalogo" class="pieDePagina__enlace" style="display: block; margin-bottom: 6px;">Catálogo Completo</a>
-                    <a href="#cotizacion" class="pieDePagina__enlace" style="display: block;">Cotizaciones a Medida</a>
                 </div>
             </div>
             <div class="pieDePagina__seccion pieDePagina__seccion--reclamaciones">
@@ -536,7 +538,7 @@
             </div>
         </div>
         <div class="pieDePagina__barraInferior">
-            <p class="pieDePagina__texto pieDePagina__texto--copyright">COPYRIGHT © 2026 Ambienta Deco & Design S.A.C. Todos los derechos reservados. Desarrollado para presentación de proyecto académico.</p>
+            <p class="pieDePagina__texto pieDePagina__texto--copyright">COPYRIGHT © 2026 Ambienta Deco & Design S.A.C. Todos los derechos reservados. RUC 20608541239. Cumplimiento normativo INDECOPI y ANPD.</p>
         </div>
     </footer>
 
@@ -792,7 +794,7 @@
                     <div class="authFormulario__terminos">
                         <label>
                             <input type="checkbox" id="regTerminos" required>
-                            Acepto los Términos del Servicio y Políticas de Privacidad de Ambienta.
+                            Acepto los <a href="#terminos-condiciones" class="enlaceLegalInline">Términos y Condiciones</a> y la <a href="#politica-privacidad" class="enlaceLegalInline">Política de Privacidad</a> de Ambienta.
                         </label>
                     </div>
                     <div id="regMensajeError" class="authMensajeError" style="display: none;"></div>
@@ -983,6 +985,52 @@
                     <button type="button" class="boton boton--secundario" onclick="window.print()">Imprimir Constancia</button>
                     <button type="button" id="btnCerrarExitoLibro" class="boton boton--primario">Entendido y Cerrar</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Términos y Condiciones (Ley N° 29571 / D.Leg. 1729) -->
+    <div class="modalContenedor" id="modalTerminos" aria-hidden="true">
+        <div class="modalContenedor__overlay" id="overlayModalTerminos"></div>
+        <div class="modalContenedor__caja modalContenedor__caja--legal">
+            <button type="button" class="modalContenedor__cerrar" id="btnCerrarTerminos" aria-label="Cerrar ventana">&times;</button>
+            <div class="legalCabecera">
+                <span class="subtituloSeccion">Marco Regulatorio Nacional</span>
+                <h3 class="legalCabecera__titulo">Términos y Condiciones de Uso y Contratación Electrónica</h3>
+                <p class="legalCabecera__subtitulo">En cumplimiento de la Ley N° 29571 (Código de Protección y Defensa del Consumidor), D.Leg. N° 1390 y D.Leg. N° 1729.</p>
+            </div>
+            <div class="textoLegalContenido">
+                <div class="articuloLegal">
+                    <h4>1. Identificación del Proveedor y Titular</h4>
+                    <p>El presente portal web pertenece a <strong>AMBIENTA DECO & DESIGN S.A.C.</strong>, con <strong>R.U.C. N° 20608541239</strong>, con domicilio legal en Av. Sosa Peláez 1580, Cercado de Lima, provincia y departamento de Lima, Perú. Correo de contacto legal: <code>ambienta@mueblesambienta.pe</code>, teléfono de atención: 994 333 225.</p>
+                </div>
+                <div class="articuloLegal">
+                    <h4>2. Capacidad Legal y Aceptación de las Condiciones</h4>
+                    <p>Al acceder, navegar y realizar compras a través de este sitio web, el usuario declara ser mayor de 18 años con plena capacidad legal para celebrar contratos de compraventa vinculantes conforme a las leyes peruanas. La confirmación de un pedido implica la aceptación total de los presentes términos.</p>
+                </div>
+                <div class="articuloLegal">
+                    <h4>3. Transparencia de Precios y Moneda Nacional</h4>
+                    <p>Todos los precios exhibidos en nuestro catálogo están expresados en Soles peruanos (PEN / S/) e <strong>incluyen el Impuesto General a las Ventas (IGV del 18%)</strong> de conformidad con las disposiciones de la SUNAT e INDECOPI. Los costos de transporte e instalación se detallan de forma clara y previa antes de que el consumidor confirme su pago.</p>
+                </div>
+                <div class="articuloLegal">
+                    <h4>4. Prohibición de Prácticas Coercitivas o Engañosas (D.Leg. 1729)</h4>
+                    <p>Ambienta no utiliza patrones oscuros (dark patterns), suscripciones automáticas ocultas, ni cobros preseleccionados no autorizados expresamente por el cliente. Toda adquisición responde a una decisión libre, informada y voluntaria del consumidor.</p>
+                </div>
+                <div class="articuloLegal">
+                    <h4>5. Proceso de Compra y Comprobantes Electrónicos</h4>
+                    <p>Una vez confirmado el pedido a través de la pasarela o medios autorizados (Yape, Plin, Transferencia BCP/BBVA), se remitirá al correo electrónico proporcionado el resumen de la compra y la correspondiente <strong>Boleta o Factura Electrónica</strong> conforme a la normativa tributaria peruana.</p>
+                </div>
+                <div class="articuloLegal">
+                    <h4>6. Especificaciones de Fabricación y Tolerancia</h4>
+                    <p>Nuestros muebles son elaborados con tableros de melamina de 18mm Pelíkano / Vesto con cantos termofusionados al calor. Las medidas especificadas cuentan con una tolerancia técnica estándar de ±2mm propia de la ebanistería moderna.</p>
+                </div>
+                <div class="articuloLegal">
+                    <h4>7. Jurisdicción y Solución de Controversias</h4>
+                    <p>Cualquier controversia derivada de la interpretación o ejecución de este contrato se regirá por las leyes de la República del Perú, sometiéndose a la competencia de los jueces y tribunales del Distrito Judicial de Lima y los procedimientos administrativos de INDECOPI.</p>
+                </div>
+            </div>
+            <div class="legalPie">
+                <button type="button" id="btnEntendidoTerminos" class="boton boton--primario" style="width: 100%;">He leído y Acepto los Términos</button>
             </div>
         </div>
     </div>

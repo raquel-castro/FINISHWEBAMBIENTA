@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     inicializarAutenticacion();
     inicializarLibroReclamaciones();
     inicializarCotizacionesYToast();
+    inicializarTerminosCondiciones();
 });
 
 // --------------------------------------------------------
@@ -1023,7 +1024,36 @@ function inicializarCotizacionesYToast() {
     }
 }
 
+// --------------------------------------------------------
+// 7. TERMINOS Y CONDICIONES (LEY N° 29571 / D.LEG. 1729)
+// --------------------------------------------------------
+function inicializarTerminosCondiciones() {
+    const modal = document.getElementById('modalTerminos');
+    const btnCerrar = document.getElementById('btnCerrarTerminos');
+    const overlay = document.getElementById('overlayModalTerminos');
+    const btnEntendido = document.getElementById('btnEntendidoTerminos');
 
+    function abrirModal() {
+        if (!modal) return;
+        modal.classList.add('modalContenedor--activo');
+        modal.setAttribute('aria-hidden', 'false');
+    }
 
+    function cerrarModal() {
+        if (!modal) return;
+        modal.classList.remove('modalContenedor--activo');
+        modal.setAttribute('aria-hidden', 'true');
+    }
 
+    document.addEventListener('click', (e) => {
+        const enlace = e.target.closest('a[href="#terminos-condiciones"]');
+        if (enlace) {
+            e.preventDefault();
+            abrirModal();
+        }
+    });
 
+    if (btnCerrar) btnCerrar.addEventListener('click', cerrarModal);
+    if (overlay) overlay.addEventListener('click', cerrarModal);
+    if (btnEntendido) btnEntendido.addEventListener('click', cerrarModal);
+}

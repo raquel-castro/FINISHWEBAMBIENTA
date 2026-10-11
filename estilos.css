@@ -1832,6 +1832,91 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 /* ========================================= */
+/* --- MODALES LEGALES Y POLÍTICAS PERÚ --- */
+/* ========================================= */
+.pieDePagina__listaLegal {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 8px;
+    text-align: left;
+}
+.pieDePagina__listaLegal li a {
+    color: #cbd5e1;
+    font-size: 0.9rem;
+    transition: color 0.2s ease, padding-left 0.2s ease;
+}
+.pieDePagina__listaLegal li a:hover {
+    color: #ff9800;
+    padding-left: 4px;
+}
+
+.modalContenedor__caja--legal {
+    max-width: 800px;
+    padding: 36px 32px;
+}
+.legalCabecera {
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+    text-align: left;
+}
+.legalCabecera__titulo {
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 6px 0 4px;
+    line-height: 1.3;
+}
+.legalCabecera__subtitulo {
+    font-size: 0.88rem;
+    color: #64748b;
+}
+.textoLegalContenido {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    text-align: left;
+    max-height: 55vh;
+    overflow-y: auto;
+    padding-right: 12px;
+    margin-bottom: 24px;
+}
+.articuloLegal h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #3f51b5;
+    margin-bottom: 6px;
+}
+.articuloLegal p {
+    font-size: 0.92rem;
+    color: #475569;
+    line-height: 1.6;
+    margin-bottom: 6px;
+}
+.articuloLegal ul {
+    list-style: disc;
+    padding-left: 20px;
+    margin-top: 6px;
+    font-size: 0.9rem;
+    color: #475569;
+    line-height: 1.5;
+}
+.legalPie {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 18px;
+}
+.enlaceLegalInline {
+    color: #3f51b5;
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 500;
+}
+.enlaceLegalInline:hover {
+    color: #1e1b4b;
+}
+
+/* ========================================= */
 /* --- ANIMACIONES --- */
 /* ========================================= */
 
