@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     inicializarCotizacionesYToast();
     inicializarTerminosCondiciones();
     inicializarPoliticaPrivacidad();
+    inicializarEnviosYGarantias();
 });
 
 // --------------------------------------------------------
@@ -1093,3 +1094,36 @@ function inicializarPoliticaPrivacidad() {
     if (btnEntendido) btnEntendido.addEventListener('click', cerrarModal);
 }
 
+// --------------------------------------------------------
+// 9. POLITICAS DE DESPACHO, ENVIOS Y GARANTIAS
+// --------------------------------------------------------
+function inicializarEnviosYGarantias() {
+    const modal = document.getElementById('modalEnviosGarantia');
+    const btnCerrar = document.getElementById('btnCerrarEnviosGarantia');
+    const overlay = document.getElementById('overlayModalEnviosGarantia');
+    const btnEntendido = document.getElementById('btnEntendidoEnviosGarantia');
+
+    function abrirModal() {
+        if (!modal) return;
+        modal.classList.add('modalContenedor--activo');
+        modal.setAttribute('aria-hidden', 'false');
+    }
+
+    function cerrarModal() {
+        if (!modal) return;
+        modal.classList.remove('modalContenedor--activo');
+        modal.setAttribute('aria-hidden', 'true');
+    }
+
+    document.addEventListener('click', (e) => {
+        const enlace = e.target.closest('a[href="#envios-garantias"]');
+        if (enlace) {
+            e.preventDefault();
+            abrirModal();
+        }
+    });
+
+    if (btnCerrar) btnCerrar.addEventListener('click', cerrarModal);
+    if (overlay) overlay.addEventListener('click', cerrarModal);
+    if (btnEntendido) btnEntendido.addEventListener('click', cerrarModal);
+}
