@@ -653,6 +653,95 @@
         </div>
     </div>
 
+    <!-- Modal Login y Registro -->
+    <div class="modalContenedor" id="modalAuth" aria-hidden="true">
+        <div class="modalContenedor__overlay" id="overlayModalAuth"></div>
+        <div class="modalContenedor__caja modalContenedor__caja--auth">
+            <button type="button" class="modalContenedor__cerrar" id="btnCerrarAuth" aria-label="Cerrar ventana">&times;</button>
+            
+            <!-- Vista de Formulario (No autenticado) -->
+            <div id="authVistasFormularios">
+                <div class="authPestanas">
+                    <button type="button" class="authPestana authPestana--activa" id="pestanaLogin">Iniciar Sesión</button>
+                    <button type="button" class="authPestana" id="pestanaRegistro">Crear Cuenta</button>
+                </div>
+
+                <!-- Formulario Login -->
+                <form id="formLogin" class="authFormulario">
+                    <div class="authFormulario__campo">
+                        <label for="loginEmail" class="authFormulario__label">Correo Electrónico</label>
+                        <input type="email" id="loginEmail" required class="authFormulario__input" placeholder="tu@correo.com">
+                    </div>
+                    <div class="authFormulario__campo">
+                        <label for="loginPassword" class="authFormulario__label">Contraseña</label>
+                        <input type="password" id="loginPassword" required class="authFormulario__input" placeholder="••••••••">
+                    </div>
+                    <div class="authFormulario__opciones">
+                        <label class="authFormulario__recordar">
+                            <input type="checkbox" id="loginRecordar" checked>
+                            Recordarme
+                        </label>
+                        <a href="#" class="authFormulario__olvido" id="enlaceOlvidoPass">¿Olvidaste tu contraseña?</a>
+                    </div>
+                    <div id="loginMensajeError" class="authMensajeError" style="display: none;"></div>
+                    <button type="submit" class="boton boton--primario authFormulario__btnSubmit">Ingresar a mi Cuenta</button>
+                </form>
+
+                <!-- Formulario Registro -->
+                <form id="formRegistro" class="authFormulario" style="display: none;">
+                    <div class="authFormulario__campo">
+                        <label for="regNombre" class="authFormulario__label">Nombres y Apellidos</label>
+                        <input type="text" id="regNombre" required class="authFormulario__input" placeholder="Ej. Ana Lucía Pérez">
+                    </div>
+                    <div class="authFormulario__campo">
+                        <label for="regEmail" class="authFormulario__label">Correo Electrónico</label>
+                        <input type="email" id="regEmail" required class="authFormulario__input" placeholder="tu@correo.com">
+                    </div>
+                    <div class="authFormulario__campo">
+                        <label for="regTelefono" class="authFormulario__label">Teléfono / Celular</label>
+                        <input type="tel" id="regTelefono" required class="authFormulario__input" placeholder="994 000 000">
+                    </div>
+                    <div class="authFormulario__campo">
+                        <label for="regPassword" class="authFormulario__label">Contraseña (mínimo 6 caracteres)</label>
+                        <input type="password" id="regPassword" required minlength="6" class="authFormulario__input" placeholder="••••••••">
+                    </div>
+                    <div class="authFormulario__campo">
+                        <label for="regConfirmPassword" class="authFormulario__label">Confirmar Contraseña</label>
+                        <input type="password" id="regConfirmPassword" required minlength="6" class="authFormulario__input" placeholder="••••••••">
+                    </div>
+                    <div class="authFormulario__terminos">
+                        <label>
+                            <input type="checkbox" id="regTerminos" required>
+                            Acepto los Términos del Servicio y Políticas de Privacidad de Ambienta.
+                        </label>
+                    </div>
+                    <div id="regMensajeError" class="authMensajeError" style="display: none;"></div>
+                    <button type="submit" class="boton boton--primario authFormulario__btnSubmit">Registrarme</button>
+                </form>
+            </div>
+
+            <!-- Vista de Perfil Activo (Cuando ya inicio sesion) -->
+            <div id="authVistaPerfil" style="display: none;" class="authPerfil">
+                <div class="authPerfil__avatar">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <h3 class="authPerfil__nombre" id="perfilNombre">Usuario</h3>
+                <p class="authPerfil__email" id="perfilEmail">correo@ejemplo.com</p>
+                <div class="authPerfil__infoBox">
+                    <p><strong>Estado:</strong> Cuenta Activa</p>
+                    <p><strong>Tipo de cliente:</strong> Comprador Registrado</p>
+                    <p><strong>Beneficios:</strong> 5% de descuento en tu siguiente cotización de muebles</p>
+                </div>
+                <div class="authPerfil__acciones">
+                    <button type="button" id="btnCerrarSesion" class="boton boton--esquema" style="width: 100%;">Cerrar Sesión</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="app.js"></script>
 </body>
 </html>

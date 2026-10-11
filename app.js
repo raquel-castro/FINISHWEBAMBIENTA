@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     inicializarCarrusel();
     inicializarCatalogo();
     inicializarCarrito();
+    inicializarAutenticacion();
 });
 
 // --------------------------------------------------------
@@ -621,5 +622,230 @@ function renderizarCarritoUI() {
     if (elemEnvio) elemEnvio.textContent = costoEnvio === 0 ? 'Gratis' : `S/ ${costoEnvio.toFixed(2)}`;
     if (elemTotal) elemTotal.textContent = `S/ ${total.toFixed(2)}`;
 }
+
+// --------------------------------------------------------
+// 4. AUTENTICACION (REGISTRO, LOGIN Y PERFIL)
+// --------------------------------------------------------
+const CLAVE_USUARIOS_STORAGE = 'ambienta_usuarios_registrados';
+const CLAVE_SESION_STORAGE = 'ambienta_sesion_activa';
+
+function obtenerUsuariosRegistrados() {
+    try {
+        const datos = localStorage.getItem(CLAVE_USUARIOS_STORAGE);
+        if (datos) return JSON.parse(datos);
+    } catch (e) {}
+
+    // Usuario demo inicial
+    const iniciales = [
+        {
+            nombre: 'Cliente Demo',
+            email: 'cliente@ambienta.pe',
+            telefono: '994333225',
+            password: 'password123'
+        }
+    ];
+    localStorage.setItem(CLAVE_USUARIOS_STORAGE, JSON.stringify(iniciales));
+    return iniciales;
+}
+
+function guardarUsuariosRegistrados(usuarios) {
+    try {
+        localStorage.setItem(CLAVE_USUARIOS_STORAGE, JSON.stringify(usuarios));
+    } catch (e) {
+        console.error('Error al guardar usuarios:', e);
+    }
+}
+
+function obtenerUsuarioActivo() {
+    try {
+        const datos = localStorage.getItem(CLAVE_SESION_STORAGE);
+        return datos ? JSON.parse(datos) : null;
+    } catch (e) {
+        return null;
+    }
+}
+
+function guardarUsuarioActivo(usuario) {
+    try {
+        if (usuario) {
+            localStorage.setItem(CLAVE_SESION_STORAGE, JSON.stringify(usuario));
+        } else {
+            localStorage.removeItem(CLAVE_SESION_STORAGE);
+        }
+    } catch (e) {
+        console.error('Error al guardar sesion:', e);
+    }
+}
+
+function inicializarAutenticacion() {
+    const btnAbrirAuth = document.getElementById('btnAbrirAuth');
+    const modalAuth = document.getElementById('modalAuth');
+    const btnCerrarAuth = document.getElementById('btnCerrarAuth');
+    const overlayAuth = document.getElementById('overlayModalAuth');
+
+    const pestanaLogin = document.getElementById('pestanaLogin');
+    const pestanaRegistro = document.getElementById('pestanaRegistro');
+    const formLogin = document.getElementById('formLogin');
+    const formRegistro = document.getElementById('formRegistro');
+
+    const authVistasFormularios = document.getElementById('authVistasFormularios');
+    const authVistaPerfil = document.getElementById('authVistaPerfil');
+    const perfilNombre = document.getElementById('perfilNombre');
+    const perfilEmail = document.getElementById('perfilEmail');
+    const btnCerrarSesion = document.getElementById('btnCerrarSesion');
+    const etiquetaUsuario = document.getElementById('etiquetaUsuario');
+
+    const loginError = document.getElementById('loginMensajeError');
+    const regError = document.getElementById('regMensajeError');
+
+    function actualizarCabeceraUsuario() {
+        const usuario = obtenerUsuarioActivo();
+        if (etiquetaUsuario) {
+            if (usuario) {
+                const primerNombre = usuario.nombre.split(' ')[0];
+                etiquetaUsuario.textContent = primerNombre;
+            } else {
+                etiquetaUsuario.textContent = 'Mi Cuenta';
+            }
+        }
+    }
+
+    function abrirModalAuth() {
+        if (!modalAuth) return;
+        const usuario = obtenerUsuarioActivo();
+
+        if (usuario) {
+            if (authVistasFormularios) authVistasFormularios.style.display = 'none';
+            if (authVistaPerfil) authVistaPerfil.style.display = 'block';
+            if (perfilNombre) perfilNombre.textContent = usuario.nombre;
+            if (perfilEmail) perfilEmail.textContent = usuario.email;
+        } else {
+            if (authVistasFormularios) authVistasFormularios.style.display = 'block';
+            if (authVistaPerfil) authVistaPerfil.style.display = 'none';
+            mostrarPestana('login');
+        }
+
+        modalAuth.classList.add('modalContenedor--activo');
+        modalAuth.setAttribute('aria-hidden', 'false');
+    }
+
+    function cerrarModalAuth() {
+        if (!modalAuth) return;
+        modalAuth.classList.remove('modalContenedor--activo');
+        modalAuth.setAttribute('aria-hidden', 'true');
+        if (loginError) loginError.style.display = 'none';
+        if (regError) regError.style.display = 'none';
+    }
+
+    function mostrarPestana(tipo) {
+        if (tipo === 'login') {
+            pestanaLogin?.classList.add('authPestana--activa');
+            pestanaRegistro?.classList.remove('authPestana--activa');
+            if (formLogin) formLogin.style.display = 'flex';
+            if (formRegistro) formRegistro.style.display = 'none';
+        } else {
+            pestanaRegistro?.classList.add('authPestana--activa');
+            pestanaLogin?.classList.remove('authPestana--activa');
+            if (formLogin) formLogin.style.display = 'none';
+            if (formRegistro) formRegistro.style.display = 'flex';
+        }
+    }
+
+    if (btnAbrirAuth) btnAbrirAuth.addEventListener('click', abrirModalAuth);
+    if (btnCerrarAuth) btnCerrarAuth.addEventListener('click', cerrarModalAuth);
+    if (overlayAuth) overlayAuth.addEventListener('click', cerrarModalAuth);
+
+    if (pestanaLogin) pestanaLogin.addEventListener('click', () => mostrarPestana('login'));
+    if (pestanaRegistro) pestanaRegistro.addEventListener('click', () => mostrarPestana('registro'));
+
+    // Submit Login
+    if (formLogin) {
+        formLogin.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = (document.getElementById('loginEmail')?.value || '').trim().toLowerCase();
+            const password = document.getElementById('loginPassword')?.value || '';
+
+            const usuarios = obtenerUsuariosRegistrados();
+            const usuarioEncontrado = usuarios.find(u => u.email.toLowerCase() === email && u.password === password);
+
+            if (usuarioEncontrado) {
+                guardarUsuarioActivo(usuarioEncontrado);
+                actualizarCabeceraUsuario();
+                cerrarModalAuth();
+                formLogin.reset();
+            } else {
+                if (loginError) {
+                    loginError.textContent = 'Correo electrónico o contraseña incorrectos. Por favor verifique sus datos.';
+                    loginError.style.display = 'block';
+                }
+            }
+        });
+    }
+
+    // Submit Registro
+    if (formRegistro) {
+        formRegistro.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const nombre = (document.getElementById('regNombre')?.value || '').trim();
+            const email = (document.getElementById('regEmail')?.value || '').trim().toLowerCase();
+            const telefono = (document.getElementById('regTelefono')?.value || '').trim();
+            const password = document.getElementById('regPassword')?.value || '';
+            const confirmPassword = document.getElementById('regConfirmPassword')?.value || '';
+
+            if (password !== confirmPassword) {
+                if (regError) {
+                    regError.textContent = 'Las contraseñas no coinciden. Verifíquelas e intente nuevamente.';
+                    regError.style.display = 'block';
+                }
+                return;
+            }
+
+            const usuarios = obtenerUsuariosRegistrados();
+            const existe = usuarios.some(u => u.email.toLowerCase() === email);
+
+            if (existe) {
+                if (regError) {
+                    regError.textContent = 'Este correo electrónico ya se encuentra registrado. Utilice Iniciar Sesión.';
+                    regError.style.display = 'block';
+                }
+                return;
+            }
+
+            const nuevoUsuario = { nombre, email, telefono, password };
+            usuarios.push(nuevoUsuario);
+            guardarUsuariosRegistrados(usuarios);
+            guardarUsuarioActivo(nuevoUsuario);
+
+            actualizarCabeceraUsuario();
+            cerrarModalAuth();
+            formRegistro.reset();
+        });
+    }
+
+    // Cerrar Sesion
+    if (btnCerrarSesion) {
+        btnCerrarSesion.addEventListener('click', () => {
+            guardarUsuarioActivo(null);
+            actualizarCabeceraUsuario();
+            cerrarModalAuth();
+        });
+    }
+
+    // Enlace Olvido de contraseña
+    const enlaceOlvidoPass = document.getElementById('enlaceOlvidoPass');
+    if (enlaceOlvidoPass) {
+        enlaceOlvidoPass.addEventListener('click', (e) => {
+            e.preventDefault();
+            const correo = prompt('Ingresa tu correo electrónico para restablecer tu contraseña:');
+            if (correo) {
+                alert(`Si el correo ${correo} existe en nuestra base de datos, te hemos enviado las instrucciones para restablecer tu contraseña.`);
+            }
+        });
+    }
+
+    // Estado inicial en cabecera
+    actualizarCabeceraUsuario();
+}
+
 
 
