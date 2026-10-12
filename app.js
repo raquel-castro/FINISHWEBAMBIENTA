@@ -121,7 +121,7 @@ const datosProductos = {
         nombre: 'Escritorio Ejecutivo "Home Office"',
         categoria: 'Oficina',
         precio: 890,
-        imagen: 'galeria/escritorio_1.jpg',
+        imagen: 'galeria/escritorio_1.webp',
         descripcion: 'Estación de trabajo ergonómica creada para jornadas continuas. Cuenta con pasacables de aluminio anodizado, cajón con cerradura de seguridad y repisa inferior para estabilizador o PC.',
         detalles: [
             'Material: Melamina 18mm resistente al calor y rayaduras',
@@ -136,7 +136,7 @@ const datosProductos = {
         nombre: 'Cocina Integral "Milán"',
         categoria: 'Cocina',
         precio: 3200,
-        imagen: 'galeria/cocina_1.jpg',
+        imagen: 'galeria/cocina_1.webp',
         descripcion: 'Conjunto completo de reposteros altos y bajos con tablero hidrófugo RH anti-humedad y grasa. Distribución inteligente con condimentero metálico extraíble y organizador de ollas.',
         detalles: [
             'Material: Melamina Tropical RH de 18mm resistente al agua',
@@ -151,7 +151,7 @@ const datosProductos = {
         nombre: 'Juego de Dormitorio "Nordic"',
         categoria: 'Dormitorio',
         precio: 1850,
-        imagen: 'galeria/dormitorio_1.jpg',
+        imagen: 'galeria/dormitorio_1.webp',
         descripcion: 'Cama tarima Queen size con 4 amplios cajones organizadores inferiores para ropa de cama y almohadas. Viene acompañada de 2 mesas de noche suspendidas de diseño flotante.',
         detalles: [
             'Compatibilidad: Colchón Queen estándar (1.60m x 2.00m)',
@@ -165,7 +165,7 @@ const datosProductos = {
         nombre: 'Estación en "L" "Corporate"',
         categoria: 'Oficina',
         precio: 1420,
-        imagen: 'galeria/oficina_1.jpg',
+        imagen: 'galeria/oficina_1.webp',
         descripcion: 'Módulo esquinero corporativo amplio. Brinda amplio espacio para doble monitor, laptop y documentos. Incluye credenza auxiliar con archivador de carpetas colgantes.',
         detalles: [
             'Medidas: 1.60m lateral principal x 1.40m lateral retorno x 0.75m alto',
@@ -178,7 +178,7 @@ const datosProductos = {
         nombre: 'Centro de Entretenimiento "Viena"',
         categoria: 'Salas y TV',
         precio: 1290,
-        imagen: 'galeria/carrusel_1.jpg',
+        imagen: 'galeria/carrusel_1.webp',
         descripcion: 'Panel flotante decorativo para Smart TV de hasta 75 pulgadas con sistema de gestión de cables oculto, repisa superior y mueble inferior de 2 puertas rebatibles.',
         detalles: [
             'Medidas: 1.90m ancho x 1.70m alto x 0.35m fondo',
@@ -191,7 +191,7 @@ const datosProductos = {
         nombre: 'Repostero Aéreo "Chef Pro"',
         categoria: 'Cocina',
         precio: 1650,
-        imagen: 'galeria/carrusel_2.jpg',
+        imagen: 'galeria/carrusel_2.webp',
         descripcion: 'Módulo aéreo de alta capacidad con 4 puertas de elevación vertical mediante pistones hidráulicos italianos. Incluye platera de acero inoxidable y especiero integrado.',
         detalles: [
             'Medidas: 1.80m largo x 0.65m alto x 0.35m fondo',
@@ -204,7 +204,7 @@ const datosProductos = {
         nombre: 'Estantería Modular "Cube"',
         categoria: 'Salas y TV',
         precio: 780,
-        imagen: 'galeria/carrusel_5.jpg',
+        imagen: 'galeria/carrusel_5.webp',
         descripcion: 'Librero multifuncional de diseño asimétrico compuesto por 12 nichos reforzados. Perfecto como divisor de ambientes en departamentos o como organizador de libros y adornos.',
         detalles: [
             'Medidas: 1.80m alto x 1.10m ancho x 0.30m fondo',
