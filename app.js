@@ -262,6 +262,17 @@ function inicializarCatalogo() {
         });
     }
 
+    document.querySelectorAll('.categorias__item[data-categoria]').forEach(enlace => {
+        enlace.addEventListener('click', () => {
+            textoBusqueda = '';
+            if (inputBuscador) inputBuscador.value = '';
+            const boton = Array.from(botonesFiltro).find(item =>
+                item.getAttribute('data-categoria') === enlace.getAttribute('data-categoria')
+            );
+            if (boton) boton.click();
+        });
+    });
+
     // Modal de vista rapida / ficha tecnica
     const modal = document.getElementById('modalProductoDetalle');
     const modalContenido = document.getElementById('contenidoDetalleProducto');
