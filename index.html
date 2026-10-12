@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ambienta | Muebles de Melamina - Deco & Design</title>
-    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="estilos.css?v=2.5">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .modalContenedor:not(.modalContenedor--activo) { display: none !important; }
+        .carritoDrawer:not(.carritoDrawer--activo) { display: none !important; }
+        .hero__slide:not(.hero__slide--activo) { opacity: 0 !important; visibility: hidden !important; }
+    </style>
 </head>
 <body>
     <div class="barraSuperior">
@@ -1167,6 +1172,6 @@
     <!-- Contenedor de Notificaciones Toast -->
     <div id="toastNotificacion" class="toastNotificacion" aria-live="polite"></div>
 
-    <script src="app.js"></script>
+    <script src="app.js?v=2.5"></script>
 </body>
 </html>
