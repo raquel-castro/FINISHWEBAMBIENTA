@@ -1,0 +1,19 @@
+{
+  "name": "finishwebambienta",
+  "version": "1.0.0",
+  "description": "Tienda web Ambienta Muebles de Melamina con Pasarela de Pagos Culqi Checkout V4",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "culqi",
+    "ecommerce",
+    "pasarela-de-pagos",
+    "checkout-v4",
+    "ambienta"
+  ],
+  "author": "Ambienta Muebles",
+  "license": "ISC"
+}

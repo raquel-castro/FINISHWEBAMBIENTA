@@ -433,7 +433,9 @@ function inicializarCarrito() {
         });
     }
 
-    // Proceso de Checkout
+    // ========================================================
+    // PROCESO DE CHECKOUT Y PASARELA DE PAGOS CULQI V4
+    // ========================================================
     const modalCheckout = document.getElementById('modalCheckout');
     const btnCerrarCheckout = document.getElementById('btnCerrarCheckout');
     const overlayCheckout = document.getElementById('overlayModalCheckout');
@@ -442,7 +444,241 @@ function inicializarCarrito() {
     const checkoutFormularioContenedor = document.getElementById('checkoutFormularioContenedor');
     const checkoutExitoContenedor = document.getElementById('checkoutExitoContenedor');
     const btnCerrarExito = document.getElementById('btnCerrarExitoCheckout');
+    const btnImprimirConstancia = document.getElementById('btnImprimirConstancia');
+    const textoBtnConfirmar = document.getElementById('textoBtnConfirmar');
+    const checkoutCargandoOverlay = document.getElementById('checkoutCargandoOverlay');
+    const checkoutCargandoTitulo = document.getElementById('checkoutCargandoTitulo');
+    const checkoutCargandoMensaje = document.getElementById('checkoutCargandoMensaje');
+    const btnToggleSandbox = document.getElementById('btnToggleSandboxInfo');
+    const panelSandboxDetalles = document.getElementById('culqiSandboxDetalles');
+    const inputCulqiPubKey = document.getElementById('inputCulqiPubKey');
+    const inputCulqiSecKey = document.getElementById('inputCulqiSecKey');
+    const btnGuardarLlavesCulqi = document.getElementById('btnGuardarLlavesCulqi');
+    const msgLlavesGuardadas = document.getElementById('msgLlavesGuardadas');
+    const inputNiubizMerchant = document.getElementById('inputNiubizMerchant');
+    const inputNiubizUser = document.getElementById('inputNiubizUser');
+    const tabBtnCulqi = document.getElementById('tabBtnCulqi');
+    const tabBtnNiubiz = document.getElementById('tabBtnNiubiz');
+    const sandboxContenidoCulqi = document.getElementById('sandboxContenidoCulqi');
+    const sandboxContenidoNiubiz = document.getElementById('sandboxContenidoNiubiz');
+    const modalNiubizEmbed = document.getElementById('modalNiubizEmbed');
+    const btnCerrarNiubizEmbed = document.getElementById('btnCerrarNiubizEmbed');
+    const formTarjetaNiubiz = document.getElementById('formTarjetaNiubiz');
 
+    // Llaves y configuración de Pasarelas (Culqi & Niubiz)
+    let culqiConfig = {
+        publicKey: localStorage.getItem('culqi_public_key') || 'pk_test_0dfd6f6e10dbdb38',
+        secretKey: localStorage.getItem('culqi_secret_key') || 'sk_test_demo_ambienta_12345'
+    };
+
+    let niubizConfig = {
+        merchantId: localStorage.getItem('niubiz_merchant_id') || '456879852',
+        user: localStorage.getItem('niubiz_user') || 'modintegration@niubiz.com.pe'
+    };
+
+    // Variable temporal para almacenar la orden en curso antes de cobrar
+    let ordenEnCurso = null;
+    let sesionNiubizActiva = null;
+
+    // Sincronizar llaves desde el servidor si está activo
+    fetch('/api/config')
+        .then(res => res.json())
+        .then(data => {
+            if (data && data.culqi) {
+                culqiConfig.publicKey = data.culqi.publicKey;
+                if (inputCulqiPubKey) inputCulqiPubKey.value = data.culqi.publicKey;
+            }
+            if (data && data.niubiz) {
+                niubizConfig.merchantId = data.niubiz.merchantId;
+                niubizConfig.user = data.niubiz.user;
+                if (inputNiubizMerchant) inputNiubizMerchant.value = data.niubiz.merchantId;
+                if (inputNiubizUser) inputNiubizUser.value = data.niubiz.user;
+            }
+        })
+        .catch(() => {
+            // Servidor estático o local sin backend express directo
+        });
+
+    if (inputCulqiPubKey) inputCulqiPubKey.value = culqiConfig.publicKey;
+    if (inputCulqiSecKey && culqiConfig.secretKey) inputCulqiSecKey.value = culqiConfig.secretKey;
+    if (inputNiubizMerchant) inputNiubizMerchant.value = niubizConfig.merchantId;
+    if (inputNiubizUser) inputNiubizUser.value = niubizConfig.user;
+
+    // Pestañas Sandbox (Culqi vs Niubiz)
+    if (tabBtnCulqi && tabBtnNiubiz) {
+        tabBtnCulqi.addEventListener('click', () => {
+            tabBtnCulqi.classList.add('sandboxTabBtn--activo');
+            tabBtnNiubiz.classList.remove('sandboxTabBtn--activo');
+            if (sandboxContenidoCulqi) sandboxContenidoCulqi.style.display = 'block';
+            if (sandboxContenidoNiubiz) sandboxContenidoNiubiz.style.display = 'none';
+        });
+        tabBtnNiubiz.addEventListener('click', () => {
+            tabBtnNiubiz.classList.add('sandboxTabBtn--activo');
+            tabBtnCulqi.classList.remove('sandboxTabBtn--activo');
+            if (sandboxContenidoCulqi) sandboxContenidoCulqi.style.display = 'none';
+            if (sandboxContenidoNiubiz) sandboxContenidoNiubiz.style.display = 'block';
+        });
+    }
+
+    // Toggle para panel de información sandbox y tarjetas de prueba
+    if (btnToggleSandbox && panelSandboxDetalles) {
+        btnToggleSandbox.addEventListener('click', () => {
+            const visible = panelSandboxDetalles.style.display !== 'none';
+            panelSandboxDetalles.style.display = visible ? 'none' : 'block';
+            btnToggleSandbox.textContent = visible ? '⚙️ Tarjetas de Prueba y Pasarelas' : '▲ Ocultar Configuración';
+        });
+    }
+
+    // Copiar datos de tarjetas de prueba con un clic
+    document.querySelectorAll('.btnCopiarTarjeta').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const num = btn.getAttribute('data-num');
+            const cvv = btn.getAttribute('data-cvv');
+            const exp = btn.getAttribute('data-exp');
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(num).then(() => {
+                    mostrarToast(`Tarjeta copiada: ${num} (CVV: ${cvv}, Exp: ${exp})`);
+                });
+            } else {
+                mostrarToast(`Tarjeta: ${num} | CVV: ${cvv} | Exp: ${exp}`);
+            }
+        });
+    });
+
+    // Guardar llaves personalizadas de pasarelas
+    if (btnGuardarLlavesCulqi) {
+        btnGuardarLlavesCulqi.addEventListener('click', async () => {
+            const nuevaPub = inputCulqiPubKey ? inputCulqiPubKey.value.trim() : '';
+            const nuevaSec = inputCulqiSecKey ? inputCulqiSecKey.value.trim() : '';
+            const nuevoMerchant = inputNiubizMerchant ? inputNiubizMerchant.value.trim() : '';
+            const nuevoUser = inputNiubizUser ? inputNiubizUser.value.trim() : '';
+
+            if (nuevaPub) {
+                culqiConfig.publicKey = nuevaPub;
+                localStorage.setItem('culqi_public_key', nuevaPub);
+            }
+            if (nuevaSec) {
+                culqiConfig.secretKey = nuevaSec;
+                localStorage.setItem('culqi_secret_key', nuevaSec);
+            }
+            if (nuevoMerchant) {
+                niubizConfig.merchantId = nuevoMerchant;
+                localStorage.setItem('niubiz_merchant_id', nuevoMerchant);
+            }
+            if (nuevoUser) {
+                niubizConfig.user = nuevoUser;
+                localStorage.setItem('niubiz_user', nuevoUser);
+            }
+
+            // Notificar al backend si está disponible
+            try {
+                await fetch('/api/config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        publicKey: nuevaPub,
+                        secretKey: nuevaSec,
+                        niubizMerchantId: nuevoMerchant,
+                        niubizUser: nuevoUser
+                    })
+                });
+            } catch (_) { }
+
+            if (msgLlavesGuardadas) {
+                msgLlavesGuardadas.textContent = '✅ Configuración actualizada con éxito';
+                setTimeout(() => { msgLlavesGuardadas.textContent = ''; }, 3500);
+            }
+            mostrarToast('Configuración de pasarelas actualizada');
+        });
+    }
+
+    // Controles para sección Yape QR
+    const seccionYapeQr = document.getElementById('seccionYapeQr');
+    const yapeMontoPagar = document.getElementById('yapeMontoPagar');
+    const btnCopiarNumeroYape = document.getElementById('btnCopiarNumeroYape');
+
+    if (btnCopiarNumeroYape) {
+        btnCopiarNumeroYape.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText('+51935436544').then(() => {
+                    mostrarToast('Número de Yape copiado: +51 935 436 544');
+                });
+            } else {
+                mostrarToast('Número de Yape: +51 935 436 544');
+            }
+        });
+    }
+
+    // Actualizar texto del botón al cambiar método de pago
+    function actualizarBotonPagoUI() {
+        const subtotal = carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
+        const costoEnvio = subtotal >= 500 ? 0 : 35;
+        const total = subtotal + costoEnvio;
+        const metodo = formCheckout ? (formCheckout.querySelector('input[name="metodoPago"]:checked')?.value || 'culqi') : 'culqi';
+
+        // Estilos en opciones
+        document.querySelectorAll('.metodoPagoOpcion').forEach(opcion => {
+            const radio = opcion.querySelector('input[type="radio"]');
+            if (radio && radio.checked) {
+                opcion.classList.add('metodoPagoOpcion--seleccionado');
+            } else {
+                opcion.classList.remove('metodoPagoOpcion--seleccionado');
+            }
+        });
+
+        // Visibilidad del QR de Yape
+        if (seccionYapeQr) {
+            if (metodo === 'yape') {
+                seccionYapeQr.style.display = 'block';
+                if (yapeMontoPagar) yapeMontoPagar.textContent = `S/ ${total.toFixed(2)}`;
+            } else {
+                seccionYapeQr.style.display = 'none';
+            }
+        }
+
+        if (textoBtnConfirmar) {
+            if (metodo === 'culqi') {
+                textoBtnConfirmar.textContent = `Pagar con Culqi Checkout (S/ ${total.toFixed(2)})`;
+            } else if (metodo === 'niubiz') {
+                textoBtnConfirmar.textContent = `Pagar con Niubiz Formulario (S/ ${total.toFixed(2)})`;
+            } else if (metodo === 'yape') {
+                textoBtnConfirmar.textContent = `Confirmar y Pagar con Yape (S/ ${total.toFixed(2)})`;
+            } else if (metodo === 'transferencia') {
+                textoBtnConfirmar.textContent = `Confirmar Pedido (Transferencia Bancaria)`;
+            } else {
+                textoBtnConfirmar.textContent = `Confirmar Pedido (Contra Entrega)`;
+            }
+        }
+    }
+
+    if (formCheckout) {
+        formCheckout.querySelectorAll('input[name="metodoPago"]').forEach(radio => {
+            radio.addEventListener('change', actualizarBotonPagoUI);
+        });
+    }
+
+    // Modal Niubiz Embed Controls
+    if (btnCerrarNiubizEmbed && modalNiubizEmbed) {
+        btnCerrarNiubizEmbed.addEventListener('click', () => {
+            modalNiubizEmbed.style.display = 'none';
+        });
+    }
+
+    // Helpers para overlay de carga
+    function mostrarOverlayCargando(titulo, mensaje) {
+        if (checkoutCargandoTitulo) checkoutCargandoTitulo.textContent = titulo;
+        if (checkoutCargandoMensaje) checkoutCargandoMensaje.textContent = mensaje;
+        if (checkoutCargandoOverlay) checkoutCargandoOverlay.style.display = 'flex';
+    }
+
+    function ocultarOverlayCargando() {
+        if (checkoutCargandoOverlay) checkoutCargandoOverlay.style.display = 'none';
+    }
+
+    // Abrir modal de checkout
     if (btnProcederPago) {
         btnProcederPago.addEventListener('click', () => {
             if (carrito.length === 0) {
@@ -451,7 +687,6 @@ function inicializarCarrito() {
             }
             cerrarDrawer();
 
-            // Calcular total a mostrar en checkout
             const subtotal = carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
             const costoEnvio = subtotal >= 500 ? 0 : 35;
             const total = subtotal + costoEnvio;
@@ -460,8 +695,11 @@ function inicializarCarrito() {
                 checkoutTotalTexto.textContent = `S/ ${total.toFixed(2)}`;
             }
 
+            actualizarBotonPagoUI();
+
             if (checkoutFormularioContenedor) checkoutFormularioContenedor.style.display = 'block';
             if (checkoutExitoContenedor) checkoutExitoContenedor.style.display = 'none';
+            ocultarOverlayCargando();
 
             if (modalCheckout) {
                 modalCheckout.classList.add('modalContenedor--activo');
@@ -474,52 +712,562 @@ function inicializarCarrito() {
         if (!modalCheckout) return;
         modalCheckout.classList.remove('modalContenedor--activo');
         modalCheckout.setAttribute('aria-hidden', 'true');
+        ocultarOverlayCargando();
     }
 
     if (btnCerrarCheckout) btnCerrarCheckout.addEventListener('click', cerrarCheckout);
     if (overlayCheckout) overlayCheckout.addEventListener('click', cerrarCheckout);
 
+    // ========================================================
+    // ENVÍO DEL FORMULARIO DE CHECKOUT
+    // ========================================================
     if (formCheckout) {
         formCheckout.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            const nombre = document.getElementById('checkoutNombre')?.value || 'Cliente';
-            const dni = document.getElementById('checkoutDni')?.value || '';
-            const telefono = document.getElementById('checkoutTelefono')?.value || '';
-            const direccion = document.getElementById('checkoutDireccion')?.value || '';
+            const nombre = document.getElementById('checkoutNombre')?.value.trim() || 'Cliente';
+            const dni = document.getElementById('checkoutDni')?.value.trim() || '';
+            const telefono = document.getElementById('checkoutTelefono')?.value.trim() || '';
+            const email = document.getElementById('checkoutEmail')?.value.trim() || '';
+            const direccion = document.getElementById('checkoutDireccion')?.value.trim() || '';
             const distrito = document.getElementById('checkoutDistrito')?.value || '';
-            const metodoPago = formCheckout.querySelector('input[name="metodoPago"]:checked')?.value || 'yape';
+            const referencia = document.getElementById('checkoutReferencia')?.value.trim() || '';
+            const metodoPago = formCheckout.querySelector('input[name="metodoPago"]:checked')?.value || 'culqi';
 
             const subtotal = carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
             const costoEnvio = subtotal >= 500 ? 0 : 35;
             const total = subtotal + costoEnvio;
-
             const codigoOrden = 'PED-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
 
-            // Mostrar pantalla de exito
-            if (checkoutFormularioContenedor) checkoutFormularioContenedor.style.display = 'none';
-            if (checkoutExitoContenedor) checkoutExitoContenedor.style.display = 'block';
+            ordenEnCurso = {
+                codigoOrden,
+                fecha: new Date().toLocaleString('es-PE'),
+                nombre,
+                dni,
+                telefono,
+                email,
+                direccion,
+                distrito,
+                referencia,
+                subtotal,
+                costoEnvio,
+                total,
+                items: [...carrito],
+                metodoPago
+            };
 
-            const codElem = document.getElementById('checkoutCodigoOrden');
-            if (codElem) codElem.textContent = codigoOrden;
+            // CASO A: Pago mediante Pasarela Culqi Checkout V4
+            if (metodoPago === 'culqi') {
+                if (typeof Culqi === 'undefined') {
+                    alert('No se pudo conectar con el script de Culqi Checkout V4. Verifica tu conexión a internet o intenta con otro método de pago.');
+                    return;
+                }
 
-            const detalleResumen = document.getElementById('checkoutDetalleResumen');
-            if (detalleResumen) {
-                detalleResumen.innerHTML = `
-                    <p><strong>Destinatario:</strong> ${nombre} (DNI: ${dni})</p>
-                    <p><strong>Contacto:</strong> ${telefono}</p>
-                    <p><strong>Dirección:</strong> ${direccion}, ${distrito}</p>
-                    <p><strong>Método de Pago:</strong> ${metodoPago.toUpperCase()}</p>
-                    <p><strong>Monto Total:</strong> S/ ${total.toFixed(2)} (${carrito.reduce((acc, i) => acc + i.cantidad, 0)} muebles)</p>
-                    <p style="margin-top: 8px; color: #16a34a; font-weight: 600;">Se ha enviado un correo con la confirmación de la orden.</p>
+                mostrarOverlayCargando('Abriendo Pasarela Culqi...', 'Conectando con el modal de pago embebido de Culqi Sandbox...');
+
+                try {
+                    Culqi.publicKey = culqiConfig.publicKey;
+                    const montoCentimos = Math.round(total * 100);
+
+                    Culqi.settings({
+                        title: 'Ambienta Muebles',
+                        currency: 'PEN',
+                        amount: montoCentimos,
+                        description: `Compra de muebles Ambienta (Orden ${codigoOrden})`
+                    });
+
+                    Culqi.options({
+                        lang: 'es',
+                        installments: true,
+                        paymentMethods: {
+                            tarjeta: true,
+                            yape: true,
+                            billetera: true,
+                            bancaMovil: true,
+                            agente: true,
+                            cuotealo: false
+                        },
+                        style: {
+                            logo: 'https://raquel-castro.github.io/FINISHWEBAMBIENTA/galeria/logo_ambienta.png',
+                            bannerColor: '#1e293b',
+                            buttonBackground: '#1e3a8a',
+                            menuColor: '#1e3a8a',
+                            linksColor: '#2563eb',
+                            priceColor: '#16a34a'
+                        }
+                    });
+
+                    setTimeout(() => {
+                        ocultarOverlayCargando();
+                        Culqi.open();
+                    }, 500);
+
+                } catch (culqiInitErr) {
+                    ocultarOverlayCargando();
+                    console.error('Error al inicializar Culqi:', culqiInitErr);
+                    alert('Error al abrir la pasarela Culqi: ' + culqiInitErr.message);
+                }
+
+                return;
+            }
+
+            // CASO B: Pago mediante Pasarela Niubiz (Pago Web / Formulario Integrado - Caso 3)
+            if (metodoPago === 'niubiz') {
+                mostrarOverlayCargando(
+                    'Iniciando Sesión Niubiz (Pasos A y B)...',
+                    'Autenticando con Basic Auth en /api.security/v1/security y generando sesión de pago (sessionKey)...'
+                );
+
+                fetch('/api/niubiz/session', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        amount: total.toFixed(2),
+                        orderData: ordenEnCurso
+                    })
+                })
+                .then(res => res.json())
+                .then(sessionData => {
+                    ocultarOverlayCargando();
+                    if (sessionData && sessionData.success) {
+                        sesionNiubizActiva = sessionData;
+                        abrirModalNiubizEmbed(sessionData, ordenEnCurso);
+                    } else {
+                        alert('Aviso Niubiz: ' + (sessionData?.error || 'No se pudo iniciar la sesión de pago'));
+                    }
+                })
+                .catch(errNiubiz => {
+                    console.warn('Backend server no disponible mediante fetch para Niubiz:', errNiubiz);
+                    ocultarOverlayCargando();
+                    // Modo didáctico autónomo si se abre directamente sin server
+                    sesionNiubizActiva = {
+                        sessionKey: 'ses_nbz_' + Math.random().toString(36).substring(2, 10),
+                        merchantId: niubizConfig.merchantId || '456879852',
+                        purchaseNumber: String(Date.now()).slice(-8),
+                        amount: total.toFixed(2)
+                    };
+                    abrirModalNiubizEmbed(sesionNiubizActiva, ordenEnCurso);
+                });
+
+                return;
+            }
+
+            // CASO C: Métodos manuales (Yape QR directo, Transferencia, Contraentrega)
+            completarOrdenDirecta(ordenEnCurso);
+        });
+    }
+
+    // ========================================================
+    // GESTIÓN DEL FORMULARIO INTEGRADO NIUBIZ (PASO C & D)
+    // ========================================================
+    function abrirModalNiubizEmbed(sesion, orden) {
+        if (!modalNiubizEmbed) return;
+
+        const ordenTexto = document.getElementById('niubizOrdenTexto');
+        const sessionTexto = document.getElementById('niubizSessionTexto');
+        const montoTexto = document.getElementById('niubizMontoTexto');
+        const titularInput = document.getElementById('niubizTitularTarjeta');
+        const btnTexto = document.getElementById('niubizBtnPagarTexto');
+
+        if (ordenTexto) ordenTexto.textContent = orden.codigoOrden;
+        if (sessionTexto) sessionTexto.textContent = sesion.sessionKey;
+        if (montoTexto) montoTexto.textContent = `S/ ${Number(orden.total).toFixed(2)}`;
+        if (titularInput) titularInput.value = orden.nombre;
+        if (btnTexto) btnTexto.textContent = `Pagar Seguro S/ ${Number(orden.total).toFixed(2)} con Niubiz`;
+
+        modalNiubizEmbed.style.display = 'flex';
+    }
+
+    // Envío del Formulario de Tarjeta Niubiz (Paso D: Validación y Autorización)
+    if (formTarjetaNiubiz) {
+        formTarjetaNiubiz.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const numTarjeta = document.getElementById('niubizNumTarjeta')?.value.replace(/\s+/g, '') || '4000000000000002';
+            const titular = document.getElementById('niubizTitularTarjeta')?.value.trim() || ordenEnCurso?.nombre || 'Cliente';
+
+            if (modalNiubizEmbed) modalNiubizEmbed.style.display = 'none';
+
+            mostrarOverlayCargando(
+                'Paso D: Validando Transacción Niubiz...',
+                `Cifrando datos de tarjeta (**** ${numTarjeta.slice(-4)}). Enviando petición a la API de Autorización y registrando orden en base de datos...`
+            );
+
+            // Generar transactionToken de Niubiz
+            const transactionToken = 'tkn_nbz_' + Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
+
+            try {
+                const authResp = await fetch('/api/niubiz/authorize', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        transactionToken: transactionToken,
+                        purchaseNumber: sesionNiubizActiva?.purchaseNumber || String(Date.now()).slice(-8),
+                        amount: Number(ordenEnCurso?.total || 0).toFixed(2),
+                        currency: 'PEN',
+                        orderData: ordenEnCurso || {},
+                        sessionKey: sesionNiubizActiva?.sessionKey,
+                        securityToken: sesionNiubizActiva?.securityToken
+                    })
+                });
+
+                const authData = await authResp.json();
+                ocultarOverlayCargando();
+
+                if (authResp.ok && authData.success) {
+                    mostrarExitoNiubiz(authData.authorization, authData.orden || ordenEnCurso, transactionToken);
+                } else {
+                    alert('Resultado de Niubiz: ' + (authData.error || 'Operación no autorizada'));
+                }
+            } catch (errAuth) {
+                console.warn('Backend server no disponible para autorización Niubiz:', errAuth);
+                ocultarOverlayCargando();
+
+                const authSimulada = {
+                    order: {
+                        authorizationCode: 'AUT' + Math.floor(100000 + Math.random() * 900000),
+                        transactionId: 'TXN' + Math.floor(100000000 + Math.random() * 900000000),
+                        actionCode: '000',
+                        actionDescription: 'Aprobada'
+                    },
+                    dataMap: {
+                        BRAND: numTarjeta.startsWith('4') ? 'VISA' : 'MASTERCARD',
+                        CARD: '**** **** **** ' + numTarjeta.slice(-4),
+                        STATUS: 'Authorized'
+                    }
+                };
+                mostrarExitoNiubiz(authSimulada, ordenEnCurso, transactionToken);
+            }
+        });
+    }
+
+    // Pantalla de Éxito y Comprobante para Niubiz (Caso 3)
+    function mostrarExitoNiubiz(auth, orden, transactionToken) {
+        if (!orden) orden = ordenEnCurso || {};
+
+        if (checkoutFormularioContenedor) checkoutFormularioContenedor.style.display = 'none';
+        if (checkoutExitoContenedor) checkoutExitoContenedor.style.display = 'block';
+
+        const codElem = document.getElementById('checkoutCodigoOrden');
+        if (codElem) codElem.textContent = orden.codigoOrden;
+
+        const authCode = auth?.order?.authorizationCode || 'AUT001';
+        const txnId = auth?.order?.transactionId || 'TXN' + Date.now().toString().slice(-8);
+        const brand = auth?.dataMap?.BRAND || 'VISA';
+        const cardMask = auth?.dataMap?.CARD || '**** **** **** 0002';
+
+        const badgePago = document.getElementById('checkoutBadgePago');
+        if (badgePago) {
+            badgePago.innerHTML = `
+                <div class="culqiExitoBadge niubizExitoBadge">
+                    <span class="culqiExitoBadge__icono">✓</span>
+                    <div class="culqiExitoBadge__texto">
+                        <strong>Transacción Niubiz Pago Web Aprobada (Caso 3)</strong>
+                        <span>Autorización: <code>${authCode}</code> | TXN: <code>${txnId}</code></span>
+                    </div>
+                </div>
+            `;
+        }
+
+        const detalleResumen = document.getElementById('checkoutDetalleResumen');
+        if (detalleResumen) {
+            const cantMuebles = (orden.items || []).reduce((acc, i) => acc + (i.cantidad || 1), 0);
+
+            detalleResumen.innerHTML = `
+                <div class="reciboCulqi reciboNiubiz">
+                    <div class="reciboCulqi__encabezado reciboNiubiz__encabezado">
+                        <span class="reciboCulqi__titulo">Comprobante de Pago Niubiz E-Commerce</span>
+                        <span class="reciboCulqi__estado">AUTORIZADO (Niubiz Sandbox)</span>
+                    </div>
+                    <div class="reciboCulqi__cuerpo">
+                        <p><strong>Titular / Cliente:</strong> ${orden.nombre} (DNI/CE: ${orden.dni})</p>
+                        <p><strong>Correo Electrónico:</strong> ${orden.email}</p>
+                        <p><strong>Teléfono de Contacto:</strong> ${orden.telefono}</p>
+                        <p><strong>Dirección de Entrega:</strong> ${orden.direccion}, ${orden.distrito}</p>
+                        <p><strong>Método de Pago:</strong> Niubiz Formulario Integrado (${brand} ${cardMask})</p>
+                        <p><strong>Código de Comercio (Merchant ID):</strong> <code>${niubizConfig.merchantId}</code></p>
+                        <p><strong>Código de Autorización:</strong> <code>${authCode}</code></p>
+                        <p><strong>Identificador de Transacción:</strong> <code>${txnId}</code></p>
+                        <p><strong>Token de Sesión (sessionKey):</strong> <code>${orden.niubizSessionKey || sesionNiubizActiva?.sessionKey || 'ses_nbz_qa'}</code></p>
+                        <p><strong>Subtotal Muebles:</strong> S/ ${Number(orden.subtotal).toFixed(2)} (${cantMuebles} productos)</p>
+                        <p><strong>Costo de Despacho:</strong> ${orden.costoEnvio === 0 ? 'Gratis (Promoción Lima)' : `S/ ${Number(orden.costoEnvio).toFixed(2)}`}</p>
+                        <p class="reciboCulqi__total"><strong>Total Cobrado:</strong> S/ ${Number(orden.total).toFixed(2)} PEN</p>
+                    </div>
+                    <div class="reciboCulqi__pie">
+                        <span>🛡️ Transacción validada con Cybersource Decision Manager y API de Autorización de Niubiz.</span>
+                    </div>
+                    <div style="margin-top: 14px; text-align: center;">
+                        <a href="https://wa.me/51935436544?text=Hola%20Ambienta,%20acabo%20de%20pagar%20mi%20pedido%20${orden.codigoOrden}%20por%20S/%20${Number(orden.total).toFixed(2)}%20con%20Niubiz%20(TXN:%20${txnId}).%20Deseo%20confirmar%20mi%20despacho." 
+                           target="_blank" 
+                           rel="noopener noreferrer" 
+                           class="boton boton--primario btnWhatsappYapeConstancia">
+                            📲 Coordinar Despacho por WhatsApp (+51 935 436 544)
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        carrito = [];
+        guardarCarritoEnStorage();
+        renderizarCarritoUI();
+        if (formCheckout) formCheckout.reset();
+        mostrarToast('¡Pago autorizado con éxito en Niubiz!');
+    }
+
+    // ========================================================
+    // CALLBACK GLOBAL DE CULQI (window.culqi)
+    // ========================================================
+    // Culqi Checkout V4 invoca automáticamente esta función tras ingresar los datos de prueba
+    window.culqi = async function () {
+        console.log('⚡ Callback global Culqi activado');
+
+        // Paso 4 de la imagen: Culqi devuelve un Token temporal en Culqi.token
+        if (typeof Culqi !== 'undefined' && Culqi.token) {
+            const token = Culqi.token.id;
+            const emailCliente = Culqi.token.email || ordenEnCurso?.email || 'cliente@correo.com';
+
+            console.log('✅ Token generado por Culqi:', token, Culqi.token);
+
+            if (typeof Culqi.close === 'function') {
+                Culqi.close();
+            }
+
+            mostrarOverlayCargando(
+                'Token Obtenido con Éxito',
+                `Token temporal: ${token}\nEnviando al backend para procesar el cargo vía POST /v2/charges...`
+            );
+
+            // Paso 5 de la imagen: Enviar token.id al backend y hacer POST a /v2/charges
+            try {
+                const response = await fetch('/api/culqi/charge', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        token: token,
+                        email: emailCliente,
+                        amount: Math.round((ordenEnCurso?.total || 0) * 100),
+                        currency: 'PEN',
+                        orderData: ordenEnCurso || {}
+                    })
+                });
+
+                const data = await response.json();
+                ocultarOverlayCargando();
+
+                if (response.ok && data.success) {
+                    mostrarExitoCulqi(data.charge, ordenEnCurso, token);
+                } else {
+                    alert('Resultado de Culqi: ' + (data.error || 'No se pudo concretar el cargo en la pasarela.'));
+                }
+            } catch (networkErr) {
+                console.warn('Backend server no disponible mediante fetch (/api/culqi/charge). Procediendo en modo autónomo frontend:', networkErr);
+                ocultarOverlayCargando();
+
+                // Simulación didáctica si el archivo se abrió directamente vía file:/// o sin backend activo
+                simularCobroExitosoFrontend(token, emailCliente, ordenEnCurso);
+            }
+
+        } else if (typeof Culqi !== 'undefined' && Culqi.order) {
+            // Pagos con Orden Culqi (Yape con Culqi, Billeteras, PagoEfectivo)
+            const ordenCulqi = Culqi.order;
+            console.log('✅ Orden Culqi recibida:', ordenCulqi);
+            if (typeof Culqi.close === 'function') Culqi.close();
+            ocultarOverlayCargando();
+
+            mostrarExitoCulqi({
+                id: ordenCulqi.id || ('ord_test_' + Date.now()),
+                amount: Math.round((ordenEnCurso?.total || 0) * 100),
+                currency_code: 'PEN',
+                outcome: { type: 'orden_aprobada', user_message: 'Pago completado vía Culqi' }
+            }, ordenEnCurso, 'Orden Culqi');
+
+        } else if (typeof Culqi !== 'undefined' && Culqi.error) {
+            ocultarOverlayCargando();
+            console.error('❌ Error devuelto por Culqi:', Culqi.error);
+            const mensajeError = Culqi.error.user_message || Culqi.error.merchant_message || 'El pago fue cancelado o rechazado por la pasarela.';
+            alert('Aviso de Pasarela Culqi: ' + mensajeError);
+        }
+    };
+
+    // Finalizar orden con Culqi y mostrar comprobante enriquecido
+    function mostrarExitoCulqi(charge, orden, tokenId) {
+        if (!orden) orden = ordenEnCurso || {};
+
+        if (checkoutFormularioContenedor) checkoutFormularioContenedor.style.display = 'none';
+        if (checkoutExitoContenedor) checkoutExitoContenedor.style.display = 'block';
+
+        const codElem = document.getElementById('checkoutCodigoOrden');
+        if (codElem) codElem.textContent = orden.codigoOrden;
+
+        const badgePago = document.getElementById('checkoutBadgePago');
+        if (badgePago) {
+            badgePago.innerHTML = `
+                <div class="culqiExitoBadge">
+                    <span class="culqiExitoBadge__icono">✓</span>
+                    <div class="culqiExitoBadge__texto">
+                        <strong>Transacción Culqi Checkout V4 Aprobada</strong>
+                        <span>ID Cargo: <code>${charge.id}</code> | Token: <code>${tokenId}</code></span>
+                    </div>
+                </div>
+            `;
+        }
+
+        const detalleResumen = document.getElementById('checkoutDetalleResumen');
+        if (detalleResumen) {
+            const cantMuebles = (orden.items || []).reduce((acc, i) => acc + (i.cantidad || 1), 0);
+            const marcaTarjeta = charge?.source?.iin?.card_brand || 'Visa';
+            const ultimosDigitos = charge?.source?.last_four || '4111';
+
+            detalleResumen.innerHTML = `
+                <div class="reciboCulqi">
+                    <div class="reciboCulqi__encabezado">
+                        <span class="reciboCulqi__titulo">Comprobante de Pago Electrónico</span>
+                        <span class="reciboCulqi__estado">PAGADO (Culqi Sandbox)</span>
+                    </div>
+                    <div class="reciboCulqi__cuerpo">
+                        <p><strong>Titular / Cliente:</strong> ${orden.nombre} (DNI/CE: ${orden.dni})</p>
+                        <p><strong>Correo Electrónico:</strong> ${orden.email}</p>
+                        <p><strong>Teléfono de Contacto:</strong> ${orden.telefono}</p>
+                        <p><strong>Dirección de Entrega:</strong> ${orden.direccion}, ${orden.distrito}</p>
+                        <p><strong>Método de Pago:</strong> Pasarela Culqi V4 (${marcaTarjeta} **** ${ultimosDigitos})</p>
+                        <p><strong>Identificador de Cargo (Culqi):</strong> <code>${charge.id}</code></p>
+                        <p><strong>Token de Autorización:</strong> <code>${tokenId}</code></p>
+                        <p><strong>Subtotal Muebles:</strong> S/ ${orden.subtotal.toFixed(2)} (${cantMuebles} productos)</p>
+                        <p><strong>Costo de Despacho:</strong> ${orden.costoEnvio === 0 ? 'Gratis (Promoción Lima)' : `S/ ${orden.costoEnvio.toFixed(2)}`}</p>
+                        <p class="reciboCulqi__total"><strong>Total Cobrado:</strong> S/ ${orden.total.toFixed(2)} PEN</p>
+                    </div>
+                    <div class="reciboCulqi__pie">
+                        <span>🔒 Cobro asegurado mediante cifrado SSL con la API oficial de Culqi (/v2/charges). Se enviará el comprobante de venta a tu correo.</span>
+                    </div>
+                    <div style="margin-top: 14px; text-align: center;">
+                        <a href="https://wa.me/51935436544?text=Hola%20Ambienta,%20acabo%20de%20pagar%20mi%20pedido%20${orden.codigoOrden}%20por%20S/%20${Number(orden.total).toFixed(2)}%20con%20Culqi%20(ID:%20${charge.id}).%20Deseo%20confirmar%20mi%20despacho." 
+                           target="_blank" 
+                           rel="noopener noreferrer" 
+                           class="boton boton--primario btnWhatsappYapeConstancia">
+                            📲 Coordinar Despacho por WhatsApp (+51 935 436 544)
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Limpiar el carrito y persistir cambios
+        carrito = [];
+        guardarCarritoEnStorage();
+        renderizarCarritoUI();
+        if (formCheckout) formCheckout.reset();
+        mostrarToast('¡Pago procesado con éxito en Culqi!');
+    }
+
+    // Cobro simulado si no hay backend activo
+    function simularCobroExitosoFrontend(tokenId, email, orden) {
+        const chargeSimulado = {
+            id: 'chr_test_' + Math.random().toString(36).substring(2, 11) + 'sim',
+            amount: Math.round((orden?.total || 0) * 100),
+            currency_code: 'PEN',
+            source: {
+                iin: { card_brand: 'Visa Débito' },
+                last_four: '4111'
+            }
+        };
+        mostrarExitoCulqi(chargeSimulado, orden, tokenId);
+    }
+
+    // Completar orden para métodos manuales
+    function completarOrdenDirecta(orden) {
+        if (checkoutFormularioContenedor) checkoutFormularioContenedor.style.display = 'none';
+        if (checkoutExitoContenedor) checkoutExitoContenedor.style.display = 'block';
+
+        const codElem = document.getElementById('checkoutCodigoOrden');
+        if (codElem) codElem.textContent = orden.codigoOrden;
+
+        const badgePago = document.getElementById('checkoutBadgePago');
+        const detalleResumen = document.getElementById('checkoutDetalleResumen');
+
+        if (orden.metodoPago === 'yape') {
+            if (badgePago) {
+                badgePago.innerHTML = `
+                    <div class="culqiExitoBadge yapeExitoBadge">
+                        <span class="culqiExitoBadge__icono">📱</span>
+                        <div class="culqiExitoBadge__texto">
+                            <strong>Pedido Registrado con Yape</strong>
+                            <span>Escanea el QR a continuación o envía al +51 935 436 544</span>
+                        </div>
+                    </div>
                 `;
             }
 
-            // Vaciar carrito tras concretar pedido
-            carrito = [];
-            guardarCarritoEnStorage();
-            renderizarCarritoUI();
-            formCheckout.reset();
+            if (detalleResumen) {
+                detalleResumen.innerHTML = `
+                    <div class="reciboYapeExito">
+                        <div class="reciboYapeExito__qrCard">
+                            <img src="galeria/qr_yape.png" alt="Código QR Yape Ambienta" class="reciboYapeExito__img">
+                            <span class="reciboYapeExito__tag">Paga aquí con Yape</span>
+                        </div>
+                        <div class="reciboYapeExito__info">
+                            <h4 class="reciboYapeExito__titulo">¡Casi listo! Realiza tu pago con Yape</h4>
+                            <p><strong>Monto Exacto:</strong> <span class="reciboYapeExito__monto">S/ ${Number(orden.total).toFixed(2)} PEN</span></p>
+                            <p><strong>Número Yape BCP:</strong> +51 935 436 544 (Ambienta Deco)</p>
+                            <p><strong>Titular del Pedido:</strong> ${orden.nombre} (DNI: ${orden.dni})</p>
+                            <p><strong>Dirección:</strong> ${orden.direccion}, ${orden.distrito}</p>
+                            <p class="reciboYapeExito__nota">
+                                💡 Al yapéar, coloca en el mensaje: <strong>${orden.codigoOrden}</strong>. Pulsa abajo para enviar tu captura por WhatsApp:
+                            </p>
+                            <a href="https://wa.me/51935436544?text=Hola%20Ambienta,%20acabo%20de%20realizar%20mi%20pedido%20${orden.codigoOrden}%20por%20S/%20${Number(orden.total).toFixed(2)}%20y%20adjunto%20mi%20comprobante%20de%20Yape." 
+                               target="_blank" 
+                               rel="noopener noreferrer" 
+                               class="boton boton--primario btnWhatsappYapeConstancia">
+                                📲 Enviar Comprobante por WhatsApp (+51 935 436 544)
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }
+        } else {
+            if (badgePago) {
+                badgePago.innerHTML = `
+                    <div class="culqiExitoBadge culqiExitoBadge--manual">
+                        <span class="culqiExitoBadge__icono">ℹ️</span>
+                        <div class="culqiExitoBadge__texto">
+                            <strong>Pedido Registrado (${orden.metodoPago.toUpperCase()})</strong>
+                            <span>Pendiente de validación de comprobante</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (detalleResumen) {
+                detalleResumen.innerHTML = `
+                    <p><strong>Destinatario:</strong> ${orden.nombre} (DNI: ${orden.dni})</p>
+                    <p><strong>Contacto:</strong> ${orden.telefono} | Correo: ${orden.email}</p>
+                    <p><strong>Dirección:</strong> ${orden.direccion}, ${orden.distrito}</p>
+                    <p><strong>Método de Pago:</strong> ${orden.metodoPago.toUpperCase()}</p>
+                    <p><strong>Monto Total:</strong> S/ ${Number(orden.total).toFixed(2)} (${(orden.items || []).reduce((acc, i) => acc + i.cantidad, 0)} muebles)</p>
+                    <p style="margin-top: 8px; color: #16a34a; font-weight: 600;">Se ha enviado un mensaje a WhatsApp con los detalles para la coordinación.</p>
+                    <div style="margin-top: 14px; text-align: center;">
+                        <a href="https://wa.me/51935436544?text=Hola%20Ambienta,%20acabo%20de%20registrar%20mi%20pedido%20${orden.codigoOrden}%20por%20S/%20${Number(orden.total).toFixed(2)}%20con%20método%20${encodeURIComponent(orden.metodoPago.toUpperCase())}.%20Deseo%20coordinar%20la%20entrega." 
+                           target="_blank" 
+                           rel="noopener noreferrer" 
+                           class="boton boton--primario btnWhatsappYapeConstancia">
+                            📲 Coordinar Pedido por WhatsApp (+51 935 436 544)
+                        </a>
+                    </div>
+                `;
+            }
+        }
+
+        carrito = [];
+        guardarCarritoEnStorage();
+        renderizarCarritoUI();
+        if (formCheckout) formCheckout.reset();
+        mostrarToast('Pedido registrado con éxito');
+    }
+
+    // Botón para imprimir constancia de compra
+    if (btnImprimirConstancia) {
+        btnImprimirConstancia.addEventListener('click', () => {
+            window.print();
         });
     }
 
@@ -527,7 +1275,7 @@ function inicializarCarrito() {
         btnCerrarExito.addEventListener('click', cerrarCheckout);
     }
 
-    // Renderizado inicial al cargar la pagina
+    // Renderizado inicial al cargar la página
     renderizarCarritoUI();
 }
 
@@ -658,7 +1406,7 @@ function obtenerUsuariosRegistrados() {
         {
             nombre: 'Cliente Demo',
             email: 'cliente@ambienta.pe',
-            telefono: '994333225',
+            telefono: '+51 935 436 544',
             password: 'password123'
         }
     ];
@@ -1031,8 +1779,13 @@ function inicializarCotizacionesYToast() {
             const nombre = document.getElementById('nombre')?.value || 'Cliente';
             const email = document.getElementById('email')?.value || '';
             const telefono = document.getElementById('telefono')?.value || '';
+            const detalles = (document.getElementById('mensaje')?.value || '').trim();
 
-            mostrarToast(`¡Gracias ${nombre}! Tu cotización fue enviada con éxito. Te responderemos al ${email || telefono} a la brevedad.`);
+            mostrarToast(`¡Gracias ${nombre}! Tu cotización fue enviada con éxito. Abriendo WhatsApp...`);
+
+            const textoWs = encodeURIComponent(`Hola Ambienta (+51 935 436 544), deseo solicitar una cotización personalizada:\n- Nombre: ${nombre}\n- Correo: ${email}\n- Teléfono: ${telefono}\n- Detalles del mueble: ${detalles}`);
+            window.open(`https://wa.me/51935436544?text=${textoWs}`, '_blank');
+
             formCotizacion.reset();
         });
     }

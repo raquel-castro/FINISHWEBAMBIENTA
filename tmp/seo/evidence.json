@@ -1,0 +1,30 @@
+{
+  "commit": "386b6e03538ced921641997f67e2cd38b5d3d322",
+  "images": 11,
+  "image_bytes": 3207093,
+  "broken_fragments": [
+    "contacto",
+    "carrito",
+    "cuenta",
+    "proyectos",
+    "cocina",
+    "dormitorio",
+    "escritorios"
+  ],
+  "sizes": {
+    "README.md": 47,
+    "estilos.css": 13351,
+    "galeria/carrusel_1.jpg": 332972,
+    "galeria/carrusel_2.jpg": 746783,
+    "galeria/carrusel_3.jpeg": 51541,
+    "galeria/carrusel_4.jpg": 280271,
+    "galeria/carrusel_5.jpg": 847897,
+    "galeria/cocina_1.jpg": 100978,
+    "galeria/dormitorio_1.jpg": 86353,
+    "galeria/escritorio_1.jpg": 482051,
+    "galeria/logo_ambienta.png": 13230,
+    "galeria/oficina_1.jpg": 212209,
+    "galeria/ropero_1.webp": 52808,
+    "index.html": 11044
+  }
+}

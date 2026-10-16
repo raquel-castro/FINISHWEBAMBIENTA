@@ -8,20 +8,23 @@
     <link rel="canonical" href="https://raquel-castro.github.io/FINISHWEBAMBIENTA/">
     <link rel="stylesheet" href="estilos.css?v=2.5">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         .modalContenedor:not(.modalContenedor--activo) { display: none !important; }
         .carritoDrawer:not(.carritoDrawer--activo) { display: none !important; }
         .hero__slide:not(.hero__slide--activo) { opacity: 0 !important; visibility: hidden !important; }
     </style>
+    <!-- Pasarela de Pagos Culqi Checkout V4 Oficial -->
+    <script src="https://checkout.culqi.com/js/v4"></script>
+    <!-- Pasarela de Pagos Niubiz Pago Web / Formulario Integrado Sandbox Oficial -->
+    <script src="https://static-content-qas.vnforapps.com/v2/js/checkout.js?qa=true"></script>
 </head>
 <body>
     <div class="barraSuperior">
         <div class="barraSuperior__contenedor">
             <span class="barraSuperior__texto">Fabricación a medida con melamina Pelíkano 18mm | Envíos e instalación en Lima</span>
             <div class="barraSuperior__accesos">
-                <a href="tel:+51994333225" class="barraSuperior__enlace">Atención: 994 333 225</a>
+                <a href="tel:+51935436544" class="barraSuperior__enlace">Atención: +51 935 436 544</a>
                 <a href="#libro-reclamaciones" class="barraSuperior__enlace">Libro de Reclamaciones</a>
             </div>
         </div>
@@ -512,7 +515,7 @@
                 <h3 class="pieDePagina__titulo">Atención y Showroom</h3>
                 <p class="pieDePagina__texto">Dirección: Av. Sosa Peláez 1580 - Cercado de Lima</p>
                 <p class="pieDePagina__texto">Email: <a href="mailto:ambienta@mueblesambienta.pe" class="pieDePagina__enlace">ambienta@mueblesambienta.pe</a></p>
-                <p class="pieDePagina__texto">Central Telefónica: <a href="tel:+51994333225" class="pieDePagina__enlace">994 333 225</a></p>
+                <p class="pieDePagina__texto">Central Telefónica: <a href="tel:+51935436544" class="pieDePagina__enlace">+51 935 436 544</a></p>
                 <p class="pieDePagina__texto">Horario: Lun a Sáb de 9:00 am a 7:00 pm</p>
             </div>
             <div class="pieDePagina__seccion pieDePagina__seccion--legal">
@@ -638,7 +641,7 @@
                             </div>
                             <div class="checkoutForm__campo">
                                 <label for="checkoutTelefono" class="checkoutForm__label">Teléfono / WhatsApp *</label>
-                                <input type="tel" id="checkoutTelefono" required class="checkoutForm__input" placeholder="Ej. 994 123 456">
+                                <input type="tel" id="checkoutTelefono" required class="checkoutForm__input" placeholder="Ej. 935 436 544">
                             </div>
                             <div class="checkoutForm__campo">
                                 <label for="checkoutEmail" class="checkoutForm__label">Correo Electrónico *</label>
@@ -685,61 +688,299 @@
                     </div>
 
                     <div class="checkoutForm__seccion">
-                        <h4 class="checkoutForm__tituloSeccion">3. Método de Pago</h4>
+                        <div class="checkoutForm__headerSeccion">
+                            <h4 class="checkoutForm__tituloSeccion">3. Método de Pago</h4>
+                            <span class="culqiSeguridadBadge">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                                Pago Seguro SSL 256-bit
+                            </span>
+                        </div>
+                        
                         <div class="checkoutMetodosPago">
-                            <label class="metodoPagoOpcion">
-                                <input type="radio" name="metodoPago" value="yape" checked>
+                            <!-- Opción 1: Culqi Checkout V4 Oficial -->
+                            <label class="metodoPagoOpcion metodoPagoOpcion--culqi metodoPagoOpcion--seleccionado">
+                                <input type="radio" name="metodoPago" value="culqi" checked>
                                 <div class="metodoPagoOpcion__info">
-                                    <strong>Yape / Plin</strong>
-                                    <span>Pago inmediato escaneando QR o al 994 333 225</span>
+                                    <div class="metodoPagoOpcion__tituloFila">
+                                        <strong>1. Culqi Checkout V4 (Modal Embebido)</strong>
+                                        <span class="culqiPillRecomendado">Caso 2</span>
+                                    </div>
+                                    <span>Paga online con Tarjetas Visa, Mastercard, AMEX, Yape y Billeteras mediante el modal embebido de Culqi.</span>
+                                    <div class="culqiBadgesFila">
+                                        <span class="culqiBadgeItem">💳 Tarjetas Culqi</span>
+                                        <span class="culqiBadgeItem">📱 Yape Oficial</span>
+                                        <span class="culqiBadgeItem">⚡ Token en Frontend</span>
+                                    </div>
                                 </div>
                             </label>
+
+                            <!-- Opción 2: Niubiz Pago Web / Formulario Integrado (Caso 3) -->
+                            <label class="metodoPagoOpcion metodoPagoOpcion--niubiz">
+                                <input type="radio" name="metodoPago" value="niubiz">
+                                <div class="metodoPagoOpcion__info">
+                                    <div class="metodoPagoOpcion__tituloFila">
+                                        <strong>2. Niubiz Pago Web (Formulario Integrado)</strong>
+                                        <span class="niubizPillRecomendado">Caso 3</span>
+                                    </div>
+                                    <span>Sesión de compra segura (Paso A/B), formulario de tarjeta Visa/Mastercard (Paso C) y validación en backend (Paso D).</span>
+                                    <div class="culqiBadgesFila">
+                                        <span class="niubizBadgeItem">💳 Visa / Mastercard</span>
+                                        <span class="niubizBadgeItem">🔑 sessionKey Dinámico</span>
+                                        <span class="niubizBadgeItem">🛡️ Basic Auth Backend</span>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <!-- Opción 3: Yape / Plin Directo -->
+                            <label class="metodoPagoOpcion">
+                                <input type="radio" name="metodoPago" value="yape">
+                                <div class="metodoPagoOpcion__info">
+                                    <div class="metodoPagoOpcion__tituloFila">
+                                        <strong>3. Yape / Plin Manual (QR Directo)</strong>
+                                    </div>
+                                    <span>Transfiere directamente vía código QR o al número de celular +51 935 436 544</span>
+                                </div>
+                            </label>
+
+                            <!-- Opción 4: Transferencia Bancaria -->
                             <label class="metodoPagoOpcion">
                                 <input type="radio" name="metodoPago" value="transferencia">
                                 <div class="metodoPagoOpcion__info">
-                                    <strong>Transferencia Bancaria BCP / BBVA</strong>
-                                    <span>Depósito directo a cuenta corriente empresarial</span>
+                                    <div class="metodoPagoOpcion__tituloFila">
+                                        <strong>4. Transferencia Bancaria BCP / BBVA</strong>
+                                    </div>
+                                    <span>Depósito o transferencia a cuenta corriente empresarial de Ambienta SAC</span>
                                 </div>
                             </label>
-                            <label class="metodoPagoOpcion">
-                                <input type="radio" name="metodoPago" value="tarjeta">
-                                <div class="metodoPagoOpcion__info">
-                                    <strong>Tarjeta de Crédito o Débito</strong>
-                                    <span>Visa, Mastercard, American Express</span>
-                                </div>
-                            </label>
+
+                            <!-- Opción 5: Contra Entrega -->
                             <label class="metodoPagoOpcion">
                                 <input type="radio" name="metodoPago" value="contraentrega">
                                 <div class="metodoPagoOpcion__info">
-                                    <strong>Contra Entrega (50% adelanto)</strong>
-                                    <span>Pagas el saldo restante cuando tu mueble esté instalado</span>
+                                    <div class="metodoPagoOpcion__tituloFila">
+                                        <strong>5. Contra Entrega (50% anticipo)</strong>
+                                    </div>
+                                    <span>50% para inicio de fabricación y saldo restante tras la entrega e instalación</span>
                                 </div>
                             </label>
+                        </div>
+
+                        <!-- Panel Desplegable de QR de Yape Oficial -->
+                        <div id="seccionYapeQr" class="seccionYapeQr" style="display: none;">
+                            <div class="seccionYapeQr__tarjeta">
+                                <div class="seccionYapeQr__imagenContenedor">
+                                    <img src="galeria/qr_yape.png" alt="Código QR Oficial Yape Ambienta" class="seccionYapeQr__img">
+                                </div>
+                                <div class="seccionYapeQr__instrucciones">
+                                    <div class="seccionYapeQr__header">
+                                        <div class="yapeLogoMini">yape</div>
+                                        <div>
+                                            <strong class="seccionYapeQr__nombreNegocio">Ambienta Deco &amp; Muebles</strong>
+                                            <span class="seccionYapeQr__subnegocio">Cuenta oficial BCP</span>
+                                        </div>
+                                    </div>
+                                    <p class="seccionYapeQr__texto">Abre tu app <strong>Yape</strong>, escanea el código QR de la izquierda o envía el pago al número:</p>
+                                    <div class="seccionYapeQr__numeroCaja">
+                                        <span class="yapeNumeroDestacado">📱 +51 935 436 544</span>
+                                        <button type="button" id="btnCopiarNumeroYape" class="btnCopiarYape">📋 Copiar</button>
+                                    </div>
+                                    <div class="seccionYapeQr__montoFila">
+                                        <span>Monto a Yapear:</span>
+                                        <strong id="yapeMontoPagar" class="yapeMontoValor">S/ 0.00</strong>
+                                    </div>
+                                    <p class="seccionYapeQr__nota">✅ Al pulsar "Confirmar", tu orden quedará registrada y podrás enviar la captura por WhatsApp.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Caja de Sandbox y Datos de Prueba Multipasarela (Culqi + Niubiz) -->
+                        <div id="panelCulqiSandbox" class="culqiSandboxBox">
+                            <div class="culqiSandboxBox__header">
+                                <div class="culqiSandboxBox__status">
+                                    <span class="puntoVerde"></span>
+                                    <span><strong>Sandbox Activo:</strong> Culqi V4 &amp; Niubiz Pago Web</span>
+                                </div>
+                                <button type="button" id="btnToggleSandboxInfo" class="culqiSandboxBox__btnToggle">
+                                    ⚙️ Tarjetas de Prueba y Pasarelas
+                                </button>
+                            </div>
+                            
+                            <div id="culqiSandboxDetalles" class="culqiSandboxBox__detalles" style="display: none;">
+                                <!-- Pestañas Sandbox -->
+                                <div class="sandboxPestanas">
+                                    <button type="button" class="sandboxTabBtn sandboxTabBtn--activo" id="tabBtnCulqi">Caso 2: Culqi V4</button>
+                                    <button type="button" class="sandboxTabBtn" id="tabBtnNiubiz">Caso 3: Niubiz Pago Web</button>
+                                </div>
+
+                                <!-- Contenido Culqi -->
+                                <div id="sandboxContenidoCulqi" class="sandboxTabContenido">
+                                    <p class="culqiSandboxBox__intro">
+                                        <strong>Flujo Culqi Checkout V4:</strong> Inicializa el objeto <code>Culqi</code> con tu Llave Pública, abre el modal embebido, captura el <code>token.id</code> en frontend y envía a <code>POST /v2/charges</code> con la Llave Secreta en backend.
+                                    </p>
+                                    <div class="culqiTarjetasPrueba">
+                                        <span class="culqiTarjetasPrueba__label">Tarjetas de Prueba Culqi (haz clic para copiar):</span>
+                                        <div class="culqiTarjetasPrueba__grid">
+                                            <button type="button" class="btnCopiarTarjeta" data-num="4111111111111111" data-cvv="123" data-exp="12/28" title="Copiar datos de Visa">
+                                                <span class="tarjetaMarca">VISA CULQI</span>
+                                                <span class="tarjetaNum">4111 1111 1111 1111</span>
+                                                <span class="tarjetaExtra">Exp: 12/28 | CVV: 123 📋 Copiar</span>
+                                            </button>
+                                            <button type="button" class="btnCopiarTarjeta" data-num="5555555555555555" data-cvv="123" data-exp="12/28" title="Copiar datos de Mastercard">
+                                                <span class="tarjetaMarca">MASTERCARD CULQI</span>
+                                                <span class="tarjetaNum">5555 5555 5555 5555</span>
+                                                <span class="tarjetaExtra">Exp: 12/28 | CVV: 123 📋 Copiar</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="culqiConfigLlaves">
+                                        <div class="culqiConfigLlaves__fila">
+                                            <label for="inputCulqiPubKey">Llave Pública Culqi (pk_test_...):</label>
+                                            <input type="text" id="inputCulqiPubKey" value="pk_test_0dfd6f6e10dbdb38" placeholder="pk_test_...">
+                                        </div>
+                                        <div class="culqiConfigLlaves__fila">
+                                            <label for="inputCulqiSecKey">Llave Secreta Backend (sk_test_...):</label>
+                                            <input type="password" id="inputCulqiSecKey" value="sk_test_demo_ambienta_12345" placeholder="sk_test_...">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Contenido Niubiz -->
+                                <div id="sandboxContenidoNiubiz" class="sandboxTabContenido" style="display: none;">
+                                    <p class="culqiSandboxBox__intro">
+                                        <strong>Flujo Niubiz Pago Web / Formulario Integrado:</strong><br>
+                                        • <strong>Paso A:</strong> Petición de autenticación Basic Auth al backend (<code>/api.security/v1/security</code>) obteniendo <code>access_token</code>.<br>
+                                        • <strong>Paso B:</strong> Creación de sesión de pago (<code>/api.ecommerce/v2/ecommerce/token/session/{merchantId}</code>) generando <code>sessionKey</code>.<br>
+                                        • <strong>Paso C:</strong> Script JavaScript de Niubiz renderiza la caja de ingreso de tarjeta segura.<br>
+                                        • <strong>Paso D:</strong> Backend captura el <code>transactionToken</code> y valida la transacción en base de datos.
+                                    </p>
+                                    <div class="culqiTarjetasPrueba">
+                                        <span class="culqiTarjetasPrueba__label">Tarjetas de Prueba Niubiz (haz clic para copiar):</span>
+                                        <div class="culqiTarjetasPrueba__grid">
+                                            <button type="button" class="btnCopiarTarjeta" data-num="4000000000000002" data-cvv="123" data-exp="12/28" title="Copiar datos de Visa Niubiz">
+                                                <span class="tarjetaMarca" style="color: #004b98;">VISA NIUBIZ</span>
+                                                <span class="tarjetaNum">4000 0000 0000 0002</span>
+                                                <span class="tarjetaExtra">Exp: 12/28 | CVV: 123 📋 Copiar</span>
+                                            </button>
+                                            <button type="button" class="btnCopiarTarjeta" data-num="5105105105105100" data-cvv="123" data-exp="12/28" title="Copiar datos de Mastercard Niubiz">
+                                                <span class="tarjetaMarca" style="color: #eb001b;">MASTERCARD NIUBIZ</span>
+                                                <span class="tarjetaNum">5105 1051 0510 5100</span>
+                                                <span class="tarjetaExtra">Exp: 12/28 | CVV: 123 📋 Copiar</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="culqiConfigLlaves">
+                                        <div class="culqiConfigLlaves__fila">
+                                            <label for="inputNiubizMerchant">Código de Comercio Niubiz (Merchant ID):</label>
+                                            <input type="text" id="inputNiubizMerchant" value="456879852" placeholder="456879852">
+                                        </div>
+                                        <div class="culqiConfigLlaves__fila">
+                                            <label for="inputNiubizUser">Usuario de Integración Sandbox:</label>
+                                            <input type="text" id="inputNiubizUser" value="modintegration@niubiz.com.pe" placeholder="modintegration@niubiz.com.pe">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="culqiConfigLlaves__acciones" style="margin-top: 10px;">
+                                    <button type="button" id="btnGuardarLlavesCulqi" class="boton boton--pequeno">Actualizar Configuración</button>
+                                    <span id="msgLlavesGuardadas" class="culqiConfigLlaves__feedback"></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="checkoutForm__resumenFinal">
                         <div class="checkoutForm__totalTexto">
-                            Total a confirmar: <strong id="checkoutTotalTexto">S/ 0.00</strong>
+                            Total a pagar: <strong id="checkoutTotalTexto">S/ 0.00</strong>
                         </div>
-                        <button type="submit" class="boton boton--primario checkoutForm__btnConfirmar">Confirmar y Emitir Pedido</button>
+                        <button type="submit" id="btnConfirmarPedido" class="boton boton--primario checkoutForm__btnConfirmar">
+                            <span id="textoBtnConfirmar">Pagar con Culqi Checkout</span>
+                        </button>
                     </div>
                 </form>
+
+                <!-- Modal / Caja del Formulario Integrado Niubiz (Paso C) -->
+                <div id="modalNiubizEmbed" class="niubizModalEmbed" style="display: none;">
+                    <div class="niubizModalEmbed__caja">
+                        <button type="button" id="btnCerrarNiubizEmbed" class="niubizModalEmbed__cerrar">&times;</button>
+                        <div class="niubizModalEmbed__header">
+                            <div class="niubizLogoHeader">
+                                <span class="niubizLogoHeader__texto">niubiz</span>
+                                <span class="niubizLogoHeader__tag">Pago Web Seguro</span>
+                            </div>
+                            <p class="niubizModalEmbed__subtitulo">Ingresa los datos de tu tarjeta de crédito o débito para completar tu compra</p>
+                            <div class="niubizModalEmbed__infoSesion">
+                                <span>Orden: <strong id="niubizOrdenTexto">PED-2026-0001</strong></span>
+                                <span>Sesión: <code id="niubizSessionTexto">ses_...</code></span>
+                                <span>Monto: <strong id="niubizMontoTexto" style="color: #0066cc;">S/ 0.00</strong></span>
+                            </div>
+                        </div>
+
+                        <!-- Formulario de Tarjeta Niubiz -->
+                        <form id="formTarjetaNiubiz" class="niubizForm">
+                            <div class="niubizForm__campo">
+                                <label for="niubizNumTarjeta">Número de Tarjeta</label>
+                                <div class="niubizInputConIcono">
+                                    <input type="text" id="niubizNumTarjeta" required maxlength="19" placeholder="4000 0000 0000 0002" value="4000 0000 0000 0002">
+                                    <span class="niubizCardIcon">💳</span>
+                                </div>
+                            </div>
+                            <div class="niubizForm__grid2">
+                                <div class="niubizForm__campo">
+                                    <label for="niubizExpTarjeta">Vencimiento (MM/AA)</label>
+                                    <input type="text" id="niubizExpTarjeta" required maxlength="5" placeholder="12/28" value="12/28">
+                                </div>
+                                <div class="niubizForm__campo">
+                                    <label for="niubizCvvTarjeta">CVV / CVC</label>
+                                    <input type="password" id="niubizCvvTarjeta" required maxlength="4" placeholder="123" value="123">
+                                </div>
+                            </div>
+                            <div class="niubizForm__campo">
+                                <label for="niubizTitularTarjeta">Nombre del Titular</label>
+                                <input type="text" id="niubizTitularTarjeta" required placeholder="Como aparece en la tarjeta">
+                            </div>
+                            <button type="submit" id="btnEjecutarPagoNiubiz" class="niubizBtnPagar">
+                                <span id="niubizBtnPagarTexto">Pagar Seguro con Niubiz</span>
+                            </button>
+                            <div class="niubizForm__seguridad">
+                                🔒 Transacción protegida por Niubiz E-Commerce y Cybersource Antifraude
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Overlay de Procesamiento Culqi -->
+                <div id="checkoutCargandoOverlay" class="checkoutCargandoOverlay" style="display: none;">
+                    <div class="checkoutCargandoOverlay__caja">
+                        <div class="spinnerCulqi"></div>
+                        <h4 id="checkoutCargandoTitulo" class="checkoutCargandoOverlay__titulo">Procesando Pago con Culqi...</h4>
+                        <p id="checkoutCargandoMensaje" class="checkoutCargandoOverlay__desc">Comunicando con la pasarela segura y generando cargo en el backend...</p>
+                    </div>
+                </div>
             </div>
 
             <!-- Pantalla de Pedido Confirmado -->
             <div id="checkoutExitoContenedor" style="display: none;" class="checkoutExito">
                 <div class="checkoutExito__icono">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                         <polyline points="22 4 12 14.01 9 11.01"></polyline>
                     </svg>
                 </div>
-                <h3 class="checkoutExito__titulo">¡Pedido Registrado con Éxito!</h3>
+                <h3 class="checkoutExito__titulo">¡Pago y Pedido Registrados con Éxito!</h3>
                 <p class="checkoutExito__codigo">Código de Orden: <strong id="checkoutCodigoOrden">PED-2026-0001</strong></p>
-                <p class="checkoutExito__mensaje">Hemos recibido tu solicitud de compra. Un asesor de Ambienta se comunicará contigo vía WhatsApp en los próximos minutos para coordinar la fecha exacta de fabricación y despacho.</p>
+                <div id="checkoutBadgePago" class="checkoutExito__badgePago"></div>
+                <p class="checkoutExito__mensaje">Hemos recibido la confirmación de tu pago a través de la pasarela segura. Tu orden ha ingresado a la cola de programación y despacho en fábrica.</p>
+                
                 <div class="checkoutExito__detalles" id="checkoutDetalleResumen"></div>
-                <button type="button" id="btnCerrarExitoCheckout" class="boton boton--primario" style="margin-top: 20px;">Volver a la Tienda</button>
+                
+                <div class="checkoutExito__botones">
+                    <button type="button" id="btnImprimirConstancia" class="boton boton--secundario">
+                        🖨️ Imprimir Constancia
+                    </button>
+                    <button type="button" id="btnCerrarExitoCheckout" class="boton boton--primario">
+                        Volver a la Tienda
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -790,7 +1031,7 @@
                     </div>
                     <div class="authFormulario__campo">
                         <label for="regTelefono" class="authFormulario__label">Teléfono / Celular</label>
-                        <input type="tel" id="regTelefono" required class="authFormulario__input" placeholder="994 000 000">
+                        <input type="tel" id="regTelefono" required class="authFormulario__input" placeholder="935 436 544">
                     </div>
                     <div class="authFormulario__campo">
                         <label for="regPassword" class="authFormulario__label">Contraseña (mínimo 6 caracteres)</label>
@@ -1011,7 +1252,7 @@
             <div class="textoLegalContenido">
                 <div class="articuloLegal">
                     <h4>1. Identificación del Proveedor y Titular</h4>
-                    <p>El presente portal web pertenece a <strong>AMBIENTA DECO & DESIGN S.A.C.</strong>, con <strong>R.U.C. N° 20608541239</strong>, con domicilio legal en Av. Sosa Peláez 1580, Cercado de Lima, provincia y departamento de Lima, Perú. Correo de contacto legal: <code>ambienta@mueblesambienta.pe</code>, teléfono de atención: 994 333 225.</p>
+                    <p>El presente portal web pertenece a <strong>AMBIENTA DECO & DESIGN S.A.C.</strong>, con <strong>R.U.C. N° 20608541239</strong>, con domicilio legal en Av. Sosa Peláez 1580, Cercado de Lima, provincia y departamento de Lima, Perú. Correo de contacto legal: <code>ambienta@mueblesambienta.pe</code>, teléfono de atención: +51 935 436 544.</p>
                 </div>
                 <div class="articuloLegal">
                     <h4>2. Capacidad Legal y Aceptación de las Condiciones</h4>
@@ -1140,7 +1381,7 @@
     </div>
 
     <!-- Boton Flotante de Atencion al Cliente (WhatsApp) -->
-    <a href="https://wa.me/51994333225?text=Hola%20Ambienta,%20deseo%20consultar%20por%20un%20mueble%20de%20melamina" 
+    <a href="https://wa.me/51935436544?text=Hola%20Ambienta,%20deseo%20consultar%20por%20un%20mueble%20de%20melamina" 
        target="_blank" 
        rel="noopener noreferrer" 
        class="botonWhatsapp" 
